@@ -411,9 +411,7 @@ for t in [0.02, 0.03, 0.05, 0.07, 0.10]:
     flagged = prob_any_intent >= t
     p = (flagged & (y_bin == 1)).sum() / max(flagged.sum(), 1)
     r = (flagged & (y_bin == 1)).sum() / (y_bin == 1).sum()
-    print(f"  {t:.1f}     |  {r:5.1%} |   {p:5.1%}   | {flagged.sum() / n_days_test:6.1f}")
-
-OPERATING_THRESHOLD = 0.5""")
+    print(f"  {t:.1f}     |  {r:5.1%} |   {p:5.1%}   | {flagged.sum() / n_days_test:6.1f}")""")
 
 md("""**Reading calibrated thresholds:** because the gate score is now a genuine probability,
 the threshold has a concrete meaning — `0.05` means "send a notification to every policy
@@ -556,8 +554,8 @@ point, the 7-day notification look-back window and the cooldown no longer overla
 caught calls drop sharply).
 
 Pick your operating point from the grid above based on the ops/UX team's appetite for
-notification volume vs deflection rate. The `0.5 / 7-day` cell is a reasonable balanced
-default — swap `OPERATING_THRESHOLD` / `COOLDOWN_DAYS` below to try any other cell.""")
+notification volume vs deflection rate. The `0.05 / 7-day` cell is the chosen operating
+point — swap `OPERATING_THRESHOLD` / `COOLDOWN_DAYS` below to try any other cell.""")
 
 code(r"""OPERATING_THRESHOLD = 0.05  # calibrated probability: ~5% chance of a call in the next 7 days
 COOLDOWN_DAYS = 7  # matches the 7-day label horizon: don't re-notify within the same lookback window
@@ -630,7 +628,7 @@ for intent, msg in examples:
 md("""## 11. Test-set push notification feed
 
 Every notification the system would actually have sent over the test period
-(15 May – 23 Jun 2026), at `OPERATING_THRESHOLD = 0.5` and `COOLDOWN_DAYS = 7`.""")
+(15 May – 23 Jun 2026), at `OPERATING_THRESHOLD = 0.05` and `COOLDOWN_DAYS = 7`.""")
 
 code(r"""print(deduped["predicted_intent"].value_counts())
 deduped[["snapshot_date", "customer_id", "policy_no", "predicted_intent", "confidence", "message"]].head(20)""")
