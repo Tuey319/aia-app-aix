@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, fontFamily, screenPadding } from '../../tokens';
 import { useAppStore } from '../../store';
+import { fetchNotifications, markNotificationRead } from '../../api/notifications';
 import {
   Notification,
   NotificationIntent,
@@ -17,6 +18,12 @@ import {
 } from './notificationTypes';
 
 type Nav = NativeStackNavigationProp<any>;
+
+// No auth/session layer exists yet to know the real logged-in customer's ID
+// (see aia-call-intelligence-service README, "Path to production" ->
+// Auth) -- pinned to a synthetic customer with active notifications until
+// that lands.
+const DEMO_CUSTOMER_ID = 'C102221';
 
 // ─── Card ────────────────────────────────────────────────────────────────────
 
@@ -157,9 +164,30 @@ export function NotificationsScreen() {
   const insets      = useSafeAreaInsets();
   const language    = useAppStore((s) => s.language);
 
-  // TODO: replace with prediction API call — see AIA-CallIntent-Prediction/src/build_features.py
-  const [notifications, setNotifications] = useState<Notification[]>(STUB_NOTIFICATIONS);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading]             = useState(true);
+  const [usingFallback, setUsingFallback] = useState(false);
   const [activeFilter, setActiveFilter]   = useState<NotificationIntent | 'all'>('all');
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchNotifications(DEMO_CUSTOMER_ID)
+      .then((fetched) => {
+        if (!cancelled) setNotifications(fetched);
+      })
+      .catch(() => {
+        // aia-call-intelligence-service unreachable (not running / wrong LAN IP / offline) --
+        // fall back to stub data so the screen still demos.
+        if (!cancelled) {
+          setNotifications(STUB_NOTIFICATIONS);
+          setUsingFallback(true);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
 
   const filtered     = activeFilter === 'all' ? notifications : notifications.filter((n) => n.intent === activeFilter);
   const unread       = filtered.filter((n) => !n.isRead);
@@ -168,6 +196,7 @@ export function NotificationsScreen() {
 
   function markRead(id: string) {
     setNotifications((prev) => prev.map((n) => n.id === id ? { ...n, isRead: true } : n));
+    if (!usingFallback) markNotificationRead(id);
   }
 
   function markAllRead() {
@@ -275,8 +304,18 @@ export function NotificationsScreen() {
         contentContainerStyle={{ paddingHorizontal: screenPadding, paddingBottom: insets.bottom + 40, gap: 10 }}
       >
 
+        {/* Loading state */}
+        {loading && (
+          <View style={{ alignItems: 'center', paddingTop: 72, gap: 12 }}>
+            <ActivityIndicator color={colors.primary} />
+            <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 13, color: '#9CA3AF' }}>
+              {language === 'en' ? 'Loading notifications…' : 'กำลังโหลดการแจ้งเตือน…'}
+            </Text>
+          </View>
+        )}
+
         {/* Empty state */}
-        {filtered.length === 0 && (
+        {!loading && filtered.length === 0 && (
           <View style={{ alignItems: 'center', paddingTop: 72, gap: 14 }}>
             <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 10, elevation: 3 }}>
               <MaterialIcons name="notifications-none" size={34} color="#D1D5DB" />

@@ -1,0 +1,4 @@
+node_modules/
+dist/
+data/notifications.json
+.env
