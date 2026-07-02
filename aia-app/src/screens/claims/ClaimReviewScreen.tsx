@@ -25,7 +25,7 @@ import { useAppStore } from '../../store';
 
 type Nav = NativeStackNavigationProp<any>;
 
-const STEP = 4;
+const STEP = 3;
 
 interface SummaryRow {
   label: string;
@@ -39,16 +39,19 @@ export function ClaimReviewScreen() {
   const language = useAppStore((state) => state.language);
 
   const SUMMARY_ROWS: SummaryRow[] = [
-    { label: language === 'en' ? 'Claim Type' : 'ประเภทการเคลม', value: language === 'en' ? 'Specialist Out-patient' : 'ผู้ป่วยนอกเฉพาะทาง' },
-    { label: language === 'en' ? 'Treatment Date' : 'วันที่รักษา', value: '15 ส.ค. 2569' },
-    { label: language === 'en' ? 'Claimant' : 'ผู้เคลม', value: language === 'en' ? 'Somchai Jaidee' : 'สมชาย ใจดี' },
-    { label: language === 'en' ? 'Receipts' : 'ใบเสร็จ', value: language === 'en' ? '2 receipts' : '2 ใบ' },
-    { label: language === 'en' ? 'Payout Account' : 'บัญชีรับเงิน', value: 'ธ.กรุงเทพ ••••45–6' },
+    { label: s.claims.insuredPerson, value: language === 'en' ? 'Somchai Jaidee' : 'สมชาย ใจดี' },
+    { label: s.claims.policyNoDropdown, value: 'TXXXXXXXXX' },
+    { label: s.claims.policyHolderLabel, value: language === 'en' ? 'AIA Company Limited' : 'บริษัท เอไอเอ จำกัด' },
+    { label: language === 'en' ? 'Claim Type' : 'ประเภทการเคลม', value: s.claims.claimCategoryMedical },
+    { label: s.claims.treatmentTypeLabel, value: s.claims.treatmentOPD },
+    { label: s.claims.illnessCauseLabel, value: language === 'en' ? 'Flu' : 'ไข้หวัด' },
+    { label: s.claims.treatmentDate, value: '7 พ.ค. 2566' },
+    { label: s.claims.hospitalNameLabel, value: language === 'en' ? 'Bangkok Christian Hospital' : 'รพ.กรุงเทพคริสเตียน' },
   ];
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
-      <ClaimStepHeader step={STEP} title={s.claims.reviewTitle} />
+      <ClaimStepHeader step={STEP} title={s.claims.confirmTitle} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -67,30 +70,53 @@ export function ClaimReviewScreen() {
             ...cardShadow,
           }}
         >
+          {/* Amount row — large, at top like the reference */}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingVertical: 16,
+            }}
+          >
+            <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: fontSize.bodyMd, color: colors.ink2 }}>
+              {s.claims.receiptAmountLabel}
+            </Text>
+            <Text style={{ fontFamily: fontFamily.jakarta.bold, fontSize: 20, color: colors.primary, letterSpacing: -0.3 }}>
+              1,256.00 {language === 'en' ? 'THB' : 'บาท'}
+            </Text>
+          </View>
+          <View style={{ height: 1, backgroundColor: colors.hairline2 }} />
+
           {SUMMARY_ROWS.map((row, index) => (
             <React.Fragment key={row.label}>
               <View
                 style={{
                   flexDirection: 'row',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   justifyContent: 'space-between',
                   paddingVertical: 13,
+                  gap: 16,
                 }}
               >
                 <Text
                   style={{
                     fontFamily: fontFamily.anuphan.regular,
-                    fontSize: fontSize.bodyMd,
+                    fontSize: fontSize.caption,
                     color: colors.textSecondary,
+                    flexShrink: 0,
                   }}
                 >
                   {row.label}
                 </Text>
                 <Text
                   style={{
+                    flex: 1,
+                    textAlign: 'right',
                     fontFamily: fontFamily.anuphan.medium,
-                    fontSize: fontSize.bodyMd,
+                    fontSize: fontSize.caption,
                     color: colors.ink2,
+                    lineHeight: 17,
                   }}
                 >
                   {row.value}
@@ -101,37 +127,27 @@ export function ClaimReviewScreen() {
               )}
             </React.Fragment>
           ))}
+        </View>
 
-          {/* Divider before amount */}
-          <View style={{ height: 1, backgroundColor: colors.hairline2 }} />
-
-          {/* Amount row — large bold */}
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingVertical: 16,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: fontFamily.anuphan.semiBold,
-                fontSize: fontSize.bodyMd,
-                color: colors.ink2,
-              }}
-            >
-              {language === 'en' ? 'Amount Claimed' : 'ยอดที่ยื่นเคลม'}
+        {/* Documents Card */}
+        <View
+          style={{
+            backgroundColor: colors.card,
+            borderRadius: radius.card,
+            padding: cardPadding,
+            gap: 10,
+            ...cardShadow,
+          }}
+        >
+          <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: fontSize.bodyMd, color: colors.ink2 }}>
+            {s.claims.attachTitle}
+          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: fontSize.caption, color: colors.textSecondary }}>
+              {s.claims.medCert}
             </Text>
-            <Text
-              style={{
-                fontFamily: fontFamily.jakarta.bold,
-                fontSize: 22,
-                color: colors.ink,
-                letterSpacing: -0.5,
-              }}
-            >
-              ฿3,200.00
+            <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: fontSize.caption, color: colors.primary }}>
+              เอกสาร.jpg
             </Text>
           </View>
         </View>
@@ -175,10 +191,7 @@ export function ClaimReviewScreen() {
       >
         <TouchableOpacity
           activeOpacity={0.85}
-          onPress={() => {
-            navigation.navigate('ClaimSubmitting');
-            setTimeout(() => navigation.navigate('ClaimSuccess'), 2500);
-          }}
+          onPress={() => navigation.navigate('ClaimOtp')}
           style={{
             backgroundColor: colors.primary,
             borderRadius: radius.button,
@@ -195,7 +208,7 @@ export function ClaimReviewScreen() {
               fontSize: 16,
             }}
           >
-            {s.claims.submitBtn}
+            {s.claims.confirmBtn}
           </Text>
         </TouchableOpacity>
       </View>

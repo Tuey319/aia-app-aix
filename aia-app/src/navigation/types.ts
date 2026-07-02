@@ -71,10 +71,9 @@ export type PolicyStackParamList = {
 export type ClaimsStackParamList = {
   ClaimStart: undefined;
   ClaimDetails: undefined;
-  ClaimAmount: undefined;
   ClaimDocs: undefined;
-  ClaimPayment: undefined;
   ClaimReview: undefined;
+  ClaimOtp: undefined;
   ClaimSuccess: undefined;
   ClaimHistory: undefined;
   ClaimSubmitting: undefined;

@@ -8,26 +8,24 @@ import { useAppStore } from '../store';
 
 const STEP_SUBTITLES_TH: Record<number, string> = {
   1: 'รายละเอียดการเคลม',
-  2: 'เอกสารแนบ/ยืนยันตัวตน',
-  3: 'บัญชีรับเงิน',
-  4: 'ตรวจสอบก่อนส่ง',
+  2: 'เอกสารแนบ',
+  3: 'ตรวจสอบก่อนส่ง',
 };
 
 const STEP_SUBTITLES_EN: Record<number, string> = {
   1: 'Claim Details',
-  2: 'Documents & ID',
-  3: 'Payout Account',
-  4: 'Review & Submit',
+  2: 'Documents',
+  3: 'Review & Submit',
 };
 
 interface ClaimStepHeaderProps {
-  step: number;    // 1-4
-  total?: number;  // defaults to 4
+  step: number;    // 1-3
+  total?: number;  // defaults to 3
   title: string;
   subtitle?: string;
 }
 
-export function ClaimStepHeader({ step, total = 4, title, subtitle }: ClaimStepHeaderProps) {
+export function ClaimStepHeader({ step, total = 3, title, subtitle }: ClaimStepHeaderProps) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const language = useAppStore((st) => st.language);
   const subtitleMap = language === 'en' ? STEP_SUBTITLES_EN : STEP_SUBTITLES_TH;

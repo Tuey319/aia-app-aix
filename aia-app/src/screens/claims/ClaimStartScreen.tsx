@@ -4,17 +4,16 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { colors, fontFamily, fontSize, radius, screenPadding, cardGap } from '../../tokens';
+import { colors, fontFamily, fontSize, radius, screenPadding, cardGap, cardPadding } from '../../tokens';
 import { cardShadow } from '../../tokens/shadows';
-import { StatusPill } from '../../components/StatusPill';
 import { useStrings } from '../../i18n';
 import { useAppStore } from '../../store';
-import { IllustrationMedicine } from '../../components/illustrations';
 
 type Nav = NativeStackNavigationProp<any>;
 
@@ -23,29 +22,6 @@ export function ClaimStartScreen() {
   const insets = useSafeAreaInsets();
   const s = useStrings();
   const language = useAppStore((state) => state.language);
-
-  const HISTORY = [
-    {
-      id: '1',
-      icon: 'check-circle' as const,
-      iconColor: colors.success,
-      title: language === 'en' ? 'Out-patient Treatment' : 'ค่ารักษาผู้ป่วยนอก',
-      meta: language === 'en' ? '12 Jun 2026 · Approved' : '12 มิ.ย. 2569 · อนุมัติแล้ว',
-      amount: '฿2,400',
-      pillVariant: 'success' as const,
-      pillLabel: s.claims.approved,
-    },
-    {
-      id: '2',
-      icon: 'pending' as const,
-      iconColor: colors.amber,
-      title: language === 'en' ? 'Quarantine Expense' : 'ค่ากักตกรรม',
-      meta: language === 'en' ? '15 Jun 2026 · Under Review' : '15 มิ.ย. 2569 · กำลังพิจารณา',
-      amount: '฿1,800',
-      pillVariant: 'amber' as const,
-      pillLabel: s.claims.pending,
-    },
-  ];
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
@@ -67,7 +43,7 @@ export function ClaimStartScreen() {
             flex: 1,
           }}
         >
-          {s.claims.title}
+          {s.claims.manageTitle}
         </Text>
       </View>
 
@@ -79,141 +55,175 @@ export function ClaimStartScreen() {
           gap: cardGap,
         }}
       >
-        {/* New Claim CTA Card */}
-        <TouchableOpacity
-          activeOpacity={0.85}
-          onPress={() => navigation.navigate('ClaimDetails')}
-          style={{
-            backgroundColor: colors.primary,
-            borderRadius: radius.cardLg,
-            padding: 20,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 16,
-            ...cardShadow,
-          }}
-        >
-          <View
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: 16,
-              backgroundColor: 'rgba(255,255,255,0.18)',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <MaterialIcons name="upload-file" size={30} color={colors.white} />
-          </View>
-
-          <View style={{ flex: 1, gap: 4 }}>
-            <Text
-              style={{
-                fontFamily: fontFamily.anuphan.bold,
-                fontSize: 16,
-                color: colors.white,
-                lineHeight: 22,
-              }}
-            >
-              {s.claims.newClaimBtn}
+        {/* ── เคลมของคุณ ─────────────────────────────────────── */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: fontSize.bodyMd, color: colors.inkBody2 }}>
+            {s.claims.yourClaims}
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('ClaimHistory')}>
+            <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: 13, color: colors.primary }}>
+              {language === 'en' ? 'View all' : 'ดูเคลมทั้งหมด'}
             </Text>
-            <Text
-              style={{
-                fontFamily: fontFamily.anuphan.regular,
-                fontSize: fontSize.body,
-                color: 'rgba(255,255,255,0.82)',
-                lineHeight: 19,
-              }}
-            >
-              {s.claims.newClaimSub}
-            </Text>
-          </View>
-
-          <MaterialIcons name="arrow-forward" size={22} color="rgba(255,255,255,0.8)" />
-        </TouchableOpacity>
-
-        <View style={{ alignItems: 'center', paddingVertical: 4 }}>
-          <IllustrationMedicine width={180} height={150} />
+          </TouchableOpacity>
         </View>
-
-        {/* History Section */}
-        <Text
-          style={{
-            fontFamily: fontFamily.anuphan.semiBold,
-            fontSize: fontSize.bodyMd,
-            color: colors.inkBody2,
-            marginTop: 4,
-          }}
-        >
-          {s.claims.historySection}
-        </Text>
 
         <View
           style={{
             backgroundColor: colors.card,
             borderRadius: radius.card,
-            overflow: 'hidden',
+            padding: cardPadding,
+            gap: 10,
             ...cardShadow,
           }}
         >
-          {HISTORY.map((item, index) => (
-            <TouchableOpacity
-              key={item.id}
-              activeOpacity={0.7}
-              onPress={() => navigation.navigate('ClaimHistory')}
-              style={[
-                {
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingHorizontal: 16,
-                  paddingVertical: 14,
-                  gap: 12,
-                },
-                index < HISTORY.length - 1 && {
-                  borderBottomWidth: 1,
-                  borderBottomColor: colors.hairline2,
-                },
-              ]}
-            >
-              <MaterialIcons name={item.icon} size={24} color={item.iconColor} />
+          <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: fontSize.bodyMd, color: colors.ink }}>
+            {language === 'en' ? 'In-patient (Accident)' : 'ผู้ป่วยใน (อุบัติเหตุ)'}
+          </Text>
+          <ReviewRow label={s.claims.claimNoLabel} value="TXXXXXXXX" mono />
+          <ReviewRow label={s.claims.beneficiary} value={language === 'en' ? 'Somxxxx Namxxxxxxx' : 'มาxxxxxx นาคxxxxxx'} />
+          <ReviewRow label={s.claims.treatmentDate} value="7 พ.ค. 2566" />
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: fontSize.caption, color: colors.textSecondary }}>
+              {language === 'en' ? 'Status' : 'สถานะ'}
+            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: colors.amber }} />
+              <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: fontSize.caption, color: colors.amberDeep }}>
+                {s.claims.statusInProgress}
+              </Text>
+            </View>
+          </View>
+          <View style={{ height: 1, backgroundColor: colors.hairline2, marginVertical: 2 }} />
+          <ReviewRow label={s.claims.totalClaimed} value="1,256.00 บาท" bold />
 
-              <View style={{ flex: 1, gap: 3 }}>
-                <Text
-                  style={{
-                    fontFamily: fontFamily.anuphan.semiBold,
-                    fontSize: fontSize.bodyMd,
-                    color: colors.ink2,
-                  }}
-                >
-                  {item.title}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: fontFamily.anuphan.regular,
-                    fontSize: fontSize.caption,
-                    color: colors.textSecondary,
-                  }}
-                >
-                  {item.meta}
-                </Text>
-              </View>
-
-              <View style={{ alignItems: 'flex-end', gap: 4 }}>
-                <Text
-                  style={{
-                    fontFamily: fontFamily.jakarta.semiBold,
-                    fontSize: fontSize.bodyMd,
-                    color: colors.ink,
-                  }}
-                >
-                  {item.amount}
-                </Text>
-                <StatusPill label={item.pillLabel} variant={item.pillVariant} />
-              </View>
-            </TouchableOpacity>
-          ))}
+          {/* Notice banner */}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              gap: 8,
+              backgroundColor: colors.amberTint,
+              borderRadius: radius.button,
+              padding: 10,
+              marginTop: 2,
+            }}
+          >
+            <MaterialIcons name="info" size={16} color={colors.amberDeep} style={{ marginTop: 1 }} />
+            <Text style={{ flex: 1, fontFamily: fontFamily.anuphan.regular, fontSize: 11, color: colors.amberDeeper, lineHeight: 16 }}>
+              {s.claims.docNotice}
+            </Text>
+          </View>
         </View>
+
+        {/* ── ยื่นเคลม ────────────────────────────────────────── */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 6 }}>
+          <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: fontSize.bodyMd, color: colors.inkBody2 }}>
+            {s.claims.newClaimSection}
+          </Text>
+          <TouchableOpacity onPress={() => Alert.alert(s.claims.howToClaimLink)}>
+            <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: 13, color: colors.primary }}>
+              {s.claims.howToClaimLink}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <ClaimTypeCard
+          icon="person"
+          title={s.claims.individualInsurance}
+          desc={s.claims.individualInsuranceDesc}
+          btnLabel={s.claims.fileClaimBtn}
+          onPress={() => navigation.navigate('ClaimDetails')}
+        />
+        <ClaimTypeCard
+          icon="groups"
+          title={s.claims.groupInsurance}
+          desc={s.claims.groupInsuranceDesc}
+          btnLabel={s.claims.fileClaimBtn}
+          onPress={() => navigation.navigate('ClaimDetails')}
+        />
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function ReviewRow({ label, value, mono, bold }: { label: string; value: string; mono?: boolean; bold?: boolean }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: fontSize.caption, color: colors.textSecondary }}>
+        {label}
+      </Text>
+      <Text
+        style={{
+          fontFamily: mono ? fontFamily.mono.regular : bold ? fontFamily.jakarta.bold : fontFamily.anuphan.medium,
+          fontSize: bold ? fontSize.bodyMd : fontSize.caption,
+          color: colors.ink2,
+        }}
+      >
+        {value}
+      </Text>
+    </View>
+  );
+}
+
+function ClaimTypeCard({
+  icon,
+  title,
+  desc,
+  btnLabel,
+  onPress,
+}: {
+  icon: keyof typeof MaterialIcons.glyphMap;
+  title: string;
+  desc: string;
+  btnLabel: string;
+  onPress: () => void;
+}) {
+  return (
+    <View
+      style={{
+        backgroundColor: colors.card,
+        borderRadius: radius.card,
+        padding: cardPadding,
+        gap: 10,
+        ...cardShadow,
+      }}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
+        <View
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 12,
+            backgroundColor: colors.primaryTint,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <MaterialIcons name={icon} size={22} color={colors.primary} />
+        </View>
+        <View style={{ flex: 1, gap: 4 }}>
+          <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: fontSize.bodyMd, color: colors.ink }}>
+            {title}
+          </Text>
+          <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 12, color: colors.textSecondary, lineHeight: 17 }}>
+            {desc}
+          </Text>
+        </View>
+      </View>
+      <TouchableOpacity
+        activeOpacity={0.75}
+        onPress={onPress}
+        style={{
+          alignSelf: 'flex-start',
+          borderWidth: 1.5,
+          borderColor: colors.primary,
+          borderRadius: radius.pill,
+          paddingHorizontal: 18,
+          paddingVertical: 8,
+        }}
+      >
+        <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 13, color: colors.primary }}>{btnLabel}</Text>
+      </TouchableOpacity>
+    </View>
   );
 }

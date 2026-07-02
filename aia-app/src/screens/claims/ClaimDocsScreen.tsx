@@ -27,11 +27,10 @@ type Nav = NativeStackNavigationProp<any>;
 
 const STEP = 2;
 
-interface DocRow {
+interface UploadSlot {
   id: string;
   label: string;
-  labelEn: string;
-  uploaded: boolean;
+  file: { name: string; size: string } | null;
 }
 
 export function ClaimDocsScreen() {
@@ -40,20 +39,24 @@ export function ClaimDocsScreen() {
   const s = useStrings();
   const language = useAppStore((state) => state.language);
 
-  const INITIAL_DOCS: DocRow[] = [
-    { id: 'receipt', label: 'ใบเสร็จรับเงินตัวจริง', labelEn: 'Original Receipt', uploaded: true },
-    { id: 'expense', label: 'ใบแสดงรายการค่าใช้จ่าย', labelEn: 'Itemised Expense Statement', uploaded: true },
-    { id: 'cert', label: 'ใบรับรองแพทย์', labelEn: 'Medical Certificate', uploaded: false },
-  ];
+  const [slots, setSlots] = useState<UploadSlot[]>([
+    { id: 'medCert', label: s.claims.medCert, file: { name: 'เอกสาร.jpg', size: '67.1KB' } },
+    { id: 'receipt', label: s.claims.docReceiptLabel, file: null },
+    { id: 'other', label: s.claims.docOtherLabel, file: null },
+  ]);
+  const [filedBefore, setFiledBefore] = useState(false);
 
-  const [docs, setDocs] = useState<DocRow[]>(INITIAL_DOCS);
-  const [idUploaded, setIdUploaded] = useState(false);
-
-  function toggleDoc(id: string) {
-    setDocs((prev) =>
-      prev.map((d) => (d.id === id ? { ...d, uploaded: !d.uploaded } : d)),
+  function upload(id: string) {
+    setSlots((prev) =>
+      prev.map((slot) => (slot.id === id ? { ...slot, file: { name: 'เอกสาร.jpg', size: '54.3KB' } } : slot)),
     );
   }
+
+  function remove(id: string) {
+    setSlots((prev) => prev.map((slot) => (slot.id === id ? { ...slot, file: null } : slot)));
+  }
+
+  const canProceed = slots.every((slot) => slot.id === 'other' || slot.file !== null);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
@@ -67,158 +70,119 @@ export function ClaimDocsScreen() {
           gap: cardGap,
         }}
       >
-        {/* Required Docs */}
-        <View
-          style={{
-            backgroundColor: colors.card,
-            borderRadius: radius.card,
-            paddingHorizontal: cardPadding,
-            ...cardShadow,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: fontFamily.anuphan.semiBold,
-              fontSize: fontSize.bodyMd,
-              color: colors.inkBody2,
-              paddingVertical: 14,
-            }}
-          >
-            {language === 'en' ? 'Required Documents for Medical Claim' : 'เอกสารที่จำเป็นสำหรับการเคลมค่ารักษา'}
-          </Text>
-          <View style={{ height: 1, backgroundColor: colors.hairline2 }} />
-
-          {docs.map((doc, index) => (
-            <React.Fragment key={doc.id}>
-              <TouchableOpacity
-                activeOpacity={0.75}
-                onPress={() => toggleDoc(doc.id)}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 14,
-                  gap: 12,
-                }}
-              >
-                {/* Status icon */}
-                {doc.uploaded ? (
-                  <MaterialIcons name="check-circle" size={22} color={colors.success} />
-                ) : (
-                  <View
-                    style={{
-                      width: 22,
-                      height: 22,
-                      borderRadius: 11,
-                      borderWidth: 1.5,
-                      borderColor: colors.hairline2,
-                      backgroundColor: colors.screenBg,
-                    }}
-                  />
-                )}
-
-                <Text
-                  style={{
-                    flex: 1,
-                    fontFamily: fontFamily.anuphan.medium,
-                    fontSize: fontSize.bodyMd,
-                    color: colors.ink2,
-                  }}
-                >
-                  {language === 'en' ? doc.labelEn : doc.label}
-                </Text>
-
-                <Text
-                  style={{
-                    fontFamily: fontFamily.anuphan.medium,
-                    fontSize: fontSize.caption,
-                    color: doc.uploaded ? colors.success : colors.primary,
-                  }}
-                >
-                  {doc.uploaded
-                    ? (language === 'en' ? 'Attached' : 'แนบแล้ว')
-                    : (language === 'en' ? 'Attach' : 'แนบใหม่')}
-                </Text>
-              </TouchableOpacity>
-              {index < docs.length - 1 && (
-                <View style={{ height: 1, backgroundColor: colors.hairline2 }} />
-              )}
-            </React.Fragment>
-          ))}
-        </View>
-
-        {/* ID Document */}
         <View
           style={{
             backgroundColor: colors.card,
             borderRadius: radius.card,
             padding: cardPadding,
-            gap: 14,
+            gap: 16,
             ...cardShadow,
           }}
         >
-          <Text
-            style={{
-              fontFamily: fontFamily.anuphan.semiBold,
-              fontSize: fontSize.bodyMd,
-              color: colors.inkBody2,
-            }}
-          >
-            {s.claims.idCard}{' '}
-            <Text
-              style={{
-                fontFamily: fontFamily.anuphan.regular,
-                color: colors.textSecondary,
-              }}
-            >
-              {language === 'en' ? '(for identity verification)' : '(เพื่อยืนยันตัวตน)'}
+          <View style={{ gap: 2 }}>
+            <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: fontSize.bodyMd, color: colors.ink }}>
+              {s.claims.attachTitle}
             </Text>
-          </Text>
+            <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 11, color: colors.textSecondary }}>
+              {s.claims.attachSizeNote}
+            </Text>
+          </View>
 
-          {/* Upload box */}
-          <TouchableOpacity
-            activeOpacity={0.75}
-            onPress={() => setIdUploaded(!idUploaded)}
+          {slots.map((slot) => (
+            <View key={slot.id} style={{ gap: 8 }}>
+              <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: fontSize.caption, color: colors.inkBody2 }}>
+                {slot.label}
+              </Text>
+              {slot.file ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 10,
+                    backgroundColor: colors.screenBg,
+                    borderRadius: radius.button,
+                    borderWidth: 1,
+                    borderColor: colors.hairline2,
+                    padding: 12,
+                  }}
+                >
+                  <MaterialIcons name="insert-drive-file" size={20} color={colors.primary} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: fontSize.caption, color: colors.ink2 }}>
+                      {slot.file.name}
+                    </Text>
+                    <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 10, color: colors.textTertiary }}>
+                      {slot.file.size}
+                    </Text>
+                  </View>
+                  <TouchableOpacity onPress={() => remove(slot.id)} hitSlop={10}>
+                    <MaterialIcons name="delete-outline" size={20} color={colors.primary} />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  activeOpacity={0.75}
+                  onPress={() => upload(slot.id)}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 6,
+                    alignSelf: 'flex-start',
+                    borderWidth: 1.5,
+                    borderColor: colors.primary,
+                    borderRadius: radius.pill,
+                    paddingHorizontal: 14,
+                    paddingVertical: 8,
+                  }}
+                >
+                  <MaterialIcons name="add" size={16} color={colors.primary} />
+                  <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: 12.5, color: colors.primary }}>
+                    {s.claims.uploadBtn}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          ))}
+        </View>
+
+        {/* Other-insurer question */}
+        <TouchableOpacity
+          activeOpacity={0.75}
+          onPress={() => setFiledBefore((v) => !v)}
+          style={{
+            backgroundColor: colors.card,
+            borderRadius: radius.card,
+            padding: cardPadding,
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            gap: 12,
+            ...cardShadow,
+          }}
+        >
+          <View
             style={{
-              height: 120,
-              borderRadius: 12,
+              width: 20,
+              height: 20,
+              borderRadius: 5,
               borderWidth: 1.5,
-              borderColor: idUploaded ? colors.success : colors.hairline2,
-              borderStyle: 'dashed',
-              backgroundColor: idUploaded ? colors.successTint : colors.screenBg,
+              borderColor: filedBefore ? colors.primary : colors.hairline2,
+              backgroundColor: filedBefore ? colors.primary : 'transparent',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 8,
+              marginTop: 1,
             }}
           >
-            <MaterialIcons
-              name={idUploaded ? 'check-circle' : 'credit-card'}
-              size={32}
-              color={idUploaded ? colors.success : colors.primary}
-            />
-            <Text
-              style={{
-                fontFamily: fontFamily.anuphan.medium,
-                fontSize: fontSize.body,
-                color: idUploaded ? colors.success : colors.ink2,
-              }}
-            >
-              {idUploaded
-                ? (language === 'en' ? 'Uploaded' : 'อัปโหลดแล้ว')
-                : (language === 'en' ? 'Capture / Upload ID Card' : 'ถ่าย / อัปโหลดบัตรประชาชน')}
+            {filedBefore && <MaterialIcons name="check" size={14} color={colors.white} />}
+          </View>
+          <View style={{ flex: 1, gap: 4 }}>
+            <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: 12.5, color: colors.ink2, lineHeight: 18 }}>
+              {s.claims.otherInsurerQuestion}
             </Text>
-            {!idUploaded && (
-              <Text
-                style={{
-                  fontFamily: fontFamily.anuphan.regular,
-                  fontSize: fontSize.caption,
-                  color: colors.textTertiary,
-                }}
-              >
-                {language === 'en' ? 'Supports JPG, PNG, PDF' : 'รองรับ JPG, PNG, PDF'}
-              </Text>
-            )}
-          </TouchableOpacity>
-        </View>
+            <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 11, color: colors.textSecondary }}>
+              {s.claims.everBefore}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
 
       {/* Sticky Bottom Button */}
@@ -234,19 +198,20 @@ export function ClaimDocsScreen() {
       >
         <TouchableOpacity
           activeOpacity={0.85}
-          onPress={() => navigation.navigate('ClaimPayment')}
+          disabled={!canProceed}
+          onPress={() => navigation.navigate('ClaimReview')}
           style={{
-            backgroundColor: colors.primary,
+            backgroundColor: canProceed ? colors.primary : colors.hairline2,
             borderRadius: radius.button,
             height: 52,
             alignItems: 'center',
             justifyContent: 'center',
-            ...primaryButtonShadow,
+            ...(canProceed ? primaryButtonShadow : {}),
           }}
         >
           <Text
             style={{
-              color: colors.white,
+              color: canProceed ? colors.white : colors.textTertiary,
               fontFamily: fontFamily.anuphan.bold,
               fontSize: 16,
             }}

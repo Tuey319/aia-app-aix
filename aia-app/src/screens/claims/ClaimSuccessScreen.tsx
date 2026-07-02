@@ -165,6 +165,33 @@ export function ClaimSuccessScreen() {
                 color: colors.textSecondary,
               }}
             >
+              {s.claims.transactionDate}
+            </Text>
+            <Text
+              style={{
+                fontFamily: fontFamily.anuphan.medium,
+                fontSize: fontSize.bodyMd,
+                color: colors.ink2,
+              }}
+            >
+              {new Date().toLocaleDateString(language === 'en' ? 'en-GB' : 'th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}
+              {', '}
+              {new Date().toLocaleTimeString(language === 'en' ? 'en-GB' : 'th-TH', { hour: '2-digit', minute: '2-digit' })}
+            </Text>
+          </View>
+
+          <View
+            style={{ height: 1, backgroundColor: colors.hairline2 }}
+          />
+
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text
+              style={{
+                fontFamily: fontFamily.anuphan.regular,
+                fontSize: fontSize.caption,
+                color: colors.textSecondary,
+              }}
+            >
               {language === 'en' ? 'Status' : 'สถานะ'}
             </Text>
             <StatusPill

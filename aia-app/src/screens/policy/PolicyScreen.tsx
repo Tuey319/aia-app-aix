@@ -15,301 +15,233 @@ import {
   fontSize,
   radius,
   screenPadding,
-  cardGap,
   cardShadow,
 } from '../../tokens';
-import { StatusPill } from '../../components/StatusPill';
-import { SectionGroup } from '../../components/SectionGroup';
-import { ListRow } from '../../components/ListRow';
 import { useAppStore } from '../../store';
 import { useStrings } from '../../i18n';
 
 type Nav = NativeStackNavigationProp<any>;
 
+const COVERAGE_CATEGORIES = [
+  { key: 'life' as const, icon: 'beach-access' as const, iconColor: '#7C5CE0', bg: '#EDE9FE', amount: '100,500,000' },
+  { key: 'criticalIllnessEarly' as const, icon: 'favorite' as const, iconColor: '#E0527A', bg: '#FDE8EC', amount: '500,000' },
+  { key: 'criticalIllnessSevere' as const, icon: 'medical-services' as const, iconColor: '#2E8FD9', bg: '#E3F1FC', amount: null },
+  { key: 'accident' as const, icon: 'personal-injury' as const, iconColor: colors.amber, bg: colors.amberTint, amount: '150,000' },
+];
+
+const QUICK_ACTIONS = [
+  { icon: 'location-on' as const, labelKey: 'qaChangeAddress' as const },
+  { icon: 'download' as const, labelKey: 'qaDownloadDocs' as const },
+  { icon: 'fact-check' as const, labelKey: 'qaTrackRequest' as const },
+  { icon: 'support-agent' as const, labelKey: 'qaContactAgent' as const },
+];
+
 export function PolicyScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
   const policy = useAppStore((s) => s.selectedPolicy);
-  const language = useAppStore((s) => s.language);
   const s = useStrings();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
-      {/* Header */}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: screenPadding,
-          paddingTop: 12,
-          paddingBottom: 16,
-          gap: 8,
-        }}
-      >
-        <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={16}>
-          <MaterialIcons name="arrow-back-ios" size={20} color={colors.ink} />
-        </TouchableOpacity>
-        <Text
+    <View style={{ flex: 1, backgroundColor: colors.screenBg }}>
+      {/* ── Red header bar ───────────────────────────────────── */}
+      <View style={{ backgroundColor: colors.primary, paddingTop: insets.top + 12, paddingBottom: 20 }}>
+        <View
           style={{
-            fontFamily: fontFamily.anuphan.bold,
-            fontSize: fontSize.titleLg,
-            color: colors.ink,
-            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: screenPadding,
           }}
         >
-          {policy.name}
-        </Text>
+          <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: fontSize.titleLg, color: colors.white }}>
+            {s.policy.yourPolicies}
+          </Text>
+          <View
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 19,
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <MaterialIcons name="person" size={22} color={colors.white} />
+          </View>
+        </View>
       </View>
 
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal: screenPadding,
+          paddingTop: 16,
           paddingBottom: insets.bottom + 32,
-          gap: cardGap,
+          gap: 16,
         }}
       >
-        {/* White hero card – policy info + sum assured */}
-        <View
-          style={{
-            backgroundColor: colors.card,
-            borderRadius: radius.cardLg,
-            padding: 18,
-            gap: 6,
-            ...cardShadow,
-          }}
-        >
-          {/* Policy number + status on same row */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text
-              style={{
-                fontFamily: fontFamily.mono.regular,
-                fontSize: fontSize.caption,
-                color: colors.textSecondary,
-                letterSpacing: 0.5,
-              }}
-            >
-              {policy.policyNo}
-            </Text>
-            <StatusPill label={s.policy.activeStatus} variant="success" />
-          </View>
-
-          {/* Plan name */}
-          <Text
-            style={{
-              fontFamily: fontFamily.anuphan.regular,
-              fontSize: fontSize.caption,
-              color: colors.textSecondary,
-            }}
-          >
-            {language === 'en' ? 'Insurance Policy' : 'กรมประกัน'}
-          </Text>
-
-          {/* Sum assured – big */}
-          <Text
-            style={{
-              fontFamily: fontFamily.jakarta.extraBold,
-              fontSize: 38,
-              color: colors.ink,
-              letterSpacing: -1,
-              lineHeight: 44,
-              marginTop: 2,
-            }}
-          >
-            ฿{policy.sumAssured.toLocaleString('en-US')}
-          </Text>
-        </View>
-
-        {/* Dark hero card – value ratio */}
-        <View
-          style={{
-            backgroundColor: colors.ink,
-            borderRadius: radius.cardLg,
-            padding: 18,
-            gap: 14,
-            ...cardShadow,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: fontFamily.anuphan.semiBold,
-              fontSize: fontSize.bodyMd,
-              color: 'rgba(255,255,255,0.75)',
-            }}
-          >
-            {s.policy.valueRatio}
-          </Text>
-
-          {/* ฿1:฿49 ratio */}
-          <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
-            <Text
-              style={{
-                fontFamily: fontFamily.jakarta.extraBold,
-                fontSize: 30,
-                color: colors.white,
-                letterSpacing: -0.8,
-              }}
-            >
-              ฿1 : ฿49
-            </Text>
-            <Text
-              style={{
-                fontFamily: fontFamily.anuphan.regular,
-                fontSize: fontSize.caption,
-                color: 'rgba(255,255,255,0.55)',
-              }}
-            >
-              {language === 'en' ? 'from coverage' : 'จาก ความคุ้มครอง'}
-            </Text>
-          </View>
-
-          {/* Two stat panels */}
-          <View style={{ flexDirection: 'row', gap: 12 }}>
-            {/* เคลมในปีนี้ */}
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: 'rgba(255,255,255,0.08)',
-                borderRadius: radius.button,
-                padding: 12,
-                gap: 4,
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: fontFamily.anuphan.regular,
-                  fontSize: fontSize.caption,
-                  color: 'rgba(255,255,255,0.55)',
-                }}
-              >
-                {s.policy.claimsThisYear}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: fontFamily.jakarta.bold,
-                  fontSize: fontSize.title,
-                  color: colors.white,
-                }}
-              >
-                ฿38,500
-              </Text>
-            </View>
-
-            {/* สิทธิ Vitality – tappable */}
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => navigation.navigate('Vitality')}
-              style={{
-                flex: 1,
-                backgroundColor: 'rgba(255,255,255,0.08)',
-                borderRadius: radius.button,
-                padding: 12,
-                gap: 4,
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: fontFamily.anuphan.regular,
-                  fontSize: fontSize.caption,
-                  color: 'rgba(255,255,255,0.55)',
-                }}
-              >
-                {s.policy.vitalityBenefit}
-              </Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Text
-                  style={{
-                    fontFamily: fontFamily.jakarta.bold,
-                    fontSize: fontSize.title,
-                    color: colors.successDot,
-                  }}
-                >
-                  ฿4,200
-                </Text>
-                <MaterialIcons name="chevron-right" size={16} color={colors.successDot} />
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          {/* Green accent row */}
+        {/* ── Coverage summary + view-all row ───────────────────── */}
+        <View style={{ flexDirection: 'row', gap: 12 }}>
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
+              flex: 1.4,
+              backgroundColor: colors.card,
+              borderRadius: radius.cardLg,
+              padding: 14,
               gap: 6,
-              backgroundColor: 'rgba(91,227,160,0.12)',
-              borderRadius: radius.button,
-              paddingHorizontal: 12,
-              paddingVertical: 10,
+              ...cardShadow,
             }}
           >
-            <MaterialIcons name="trending-up" size={18} color={colors.successDot} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: 11, color: colors.info }}>
+                {s.policy.coverageSection}
+              </Text>
+              <View
+                style={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: 10,
+                  backgroundColor: colors.primaryTint,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <MaterialIcons name="check" size={13} color={colors.primary} />
+              </View>
+            </View>
             <Text
+              style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 13, color: colors.ink, lineHeight: 18 }}
+              numberOfLines={2}
+            >
+              {policy.name}
+            </Text>
+            <View style={{ gap: 1 }}>
+              <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 10, color: colors.textSecondary }}>
+                {s.policy.policyNoLabel}
+              </Text>
+              <Text style={{ fontFamily: fontFamily.mono.regular, fontSize: 12, color: colors.ink2 }}>
+                {policy.policyNo}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: colors.card,
+              borderRadius: radius.cardLg,
+              padding: 14,
+              justifyContent: 'space-between',
+              ...cardShadow,
+            }}
+          >
+            <View
               style={{
-                fontFamily: fontFamily.anuphan.semiBold,
-                fontSize: fontSize.body,
-                color: colors.successDot,
-                flex: 1,
+                width: 32,
+                height: 32,
+                borderRadius: 10,
+                backgroundColor: colors.primaryTint,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              {language === 'en' ? 'You received more than you paid this year' : 'คุณได้รับมากกว่าที่จ่ายในปีนี้'}
-            </Text>
+              <MaterialIcons name="shield" size={18} color={colors.primary} />
+            </View>
+            <View style={{ gap: 2 }}>
+              <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: 12, color: colors.ink2, lineHeight: 16 }}>
+                {s.policy.viewAllPolicies}
+              </Text>
+              <MaterialIcons name="arrow-forward" size={16} color={colors.primary} />
+            </View>
           </View>
         </View>
 
-        {/* Coverage section */}
-        <SectionGroup label={s.policy.coverageSection}>
-          <ListRow
-            icon="local-hospital"
-            iconColor={colors.primary}
-            title={s.policy.inpatient}
-            right={
-              <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: fontSize.bodyMd, color: colors.ink2 }}>
-                {language === 'en' ? 'Full' : 'เต็มจำนวน'}
-              </Text>
-            }
-            onPress={() => navigation.navigate('CoverageDetail')}
-          />
-          <ListRow
-            icon="favorite"
-            iconColor={colors.primary}
-            title={s.policy.criticalIllness}
-            right={
-              <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: fontSize.bodyMd, color: colors.ink2 }}>
-                ฿1,000,000
-              </Text>
-            }
-            onPress={() => {}}
-          />
-          <ListRow
-            icon="verified-user"
-            iconColor={colors.primary}
-            title={s.policy.lifeInsurance}
-            right={
-              <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: fontSize.bodyMd, color: colors.ink2 }}>
-                ฿1,500,000
-              </Text>
-            }
-            onPress={() => {}}
-          />
-        </SectionGroup>
-
-        {/* Policy docs row */}
+        {/* ── Quick actions row ─────────────────────────────────── */}
         <View
           style={{
+            flexDirection: 'row',
             backgroundColor: colors.card,
-            borderRadius: radius.card,
-            overflow: 'hidden',
+            borderRadius: radius.cardLg,
+            paddingVertical: 16,
             ...cardShadow,
           }}
         >
-          <ListRow
-            icon="description"
-            title={s.policy.documents}
-            onPress={() => navigation.navigate('PolicyDocs')}
-          />
+          {QUICK_ACTIONS.map((qa, i) => (
+            <TouchableOpacity
+              key={i}
+              activeOpacity={0.75}
+              onPress={qa.labelKey === 'qaDownloadDocs' ? () => navigation.navigate('PolicyDocs') : undefined}
+              style={{ flex: 1, alignItems: 'center', gap: 8, paddingHorizontal: 4 }}
+            >
+              <MaterialIcons name={qa.icon} size={22} color={colors.primary} />
+              <Text
+                style={{
+                  fontFamily: fontFamily.anuphan.medium,
+                  fontSize: 10.5,
+                  color: colors.inkBody2,
+                  textAlign: 'center',
+                  lineHeight: 14,
+                }}
+              >
+                {s.policy[qa.labelKey]}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* ── Coverage overview list ────────────────────────────── */}
+        <View>
+          <Text
+            style={{
+              fontFamily: fontFamily.anuphan.bold,
+              fontSize: 15,
+              color: colors.ink,
+              marginBottom: 10,
+            }}
+          >
+            {s.policy.coverageOverview}
+          </Text>
+          <View style={{ backgroundColor: colors.card, borderRadius: radius.cardLg, overflow: 'hidden', ...cardShadow }}>
+            {COVERAGE_CATEGORIES.map((cat, i) => (
+              <TouchableOpacity
+                key={cat.key}
+                activeOpacity={0.75}
+                onPress={() => navigation.navigate('CoverageDetail')}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: 14,
+                  paddingHorizontal: 16,
+                  gap: 12,
+                  borderTopWidth: i > 0 ? 1 : 0,
+                  borderTopColor: colors.hairline,
+                }}
+              >
+                <View
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 18,
+                    backgroundColor: cat.bg,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <MaterialIcons name={cat.icon} size={18} color={cat.iconColor} />
+                </View>
+                <Text style={{ flex: 1, fontFamily: fontFamily.anuphan.semiBold, fontSize: 13, color: colors.ink2 }}>
+                  {s.policy[cat.key]}
+                </Text>
+                <Text style={{ fontFamily: fontFamily.jakarta.semiBold, fontSize: 13, color: colors.ink2 }}>
+                  {cat.amount ?? '-'}
+                </Text>
+                <MaterialIcons name="chevron-right" size={18} color={colors.textTertiary} />
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }

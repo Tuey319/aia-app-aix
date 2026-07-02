@@ -7,10 +7,9 @@ const Stack = createNativeStackNavigator<ClaimsStackParamList>();
 
 let ClaimStartScreen: React.ComponentType<any>;
 let ClaimDetailsScreen: React.ComponentType<any>;
-let ClaimAmountScreen: React.ComponentType<any>;
 let ClaimDocsScreen: React.ComponentType<any>;
-let ClaimPaymentScreen: React.ComponentType<any>;
 let ClaimReviewScreen: React.ComponentType<any>;
+let ClaimOtpScreen: React.ComponentType<any>;
 let ClaimSuccessScreen: React.ComponentType<any>;
 let ClaimHistoryScreen: React.ComponentType<any>;
 let ClaimSubmittingScreen: React.ComponentType<any>;
@@ -20,10 +19,9 @@ let EmptyHistoryScreen: React.ComponentType<any>;
 
 try { ClaimStartScreen = require('../screens/claims/ClaimStartScreen').ClaimStartScreen; } catch { ClaimStartScreen = () => <PlaceholderScreen name="เคลมของฉัน" />; }
 try { ClaimDetailsScreen = require('../screens/claims/ClaimDetailsScreen').ClaimDetailsScreen; } catch { ClaimDetailsScreen = () => <PlaceholderScreen name="ยื่นเคลมใหม่" />; }
-try { ClaimAmountScreen = require('../screens/claims/ClaimAmountScreen').ClaimAmountScreen; } catch { ClaimAmountScreen = () => <PlaceholderScreen name="จำนวนเงิน" />; }
 try { ClaimDocsScreen = require('../screens/claims/ClaimDocsScreen').ClaimDocsScreen; } catch { ClaimDocsScreen = () => <PlaceholderScreen name="อัปโหลดเอกสาร" />; }
-try { ClaimPaymentScreen = require('../screens/claims/ClaimPaymentScreen').ClaimPaymentScreen; } catch { ClaimPaymentScreen = () => <PlaceholderScreen name="ข้อมูลการรับเงิน" />; }
 try { ClaimReviewScreen = require('../screens/claims/ClaimReviewScreen').ClaimReviewScreen; } catch { ClaimReviewScreen = () => <PlaceholderScreen name="ตรวจสอบและส่งเคลม" />; }
+try { ClaimOtpScreen = require('../screens/claims/ClaimOtpScreen').ClaimOtpScreen; } catch { ClaimOtpScreen = () => <PlaceholderScreen name="ใส่รหัส OTP" />; }
 try { ClaimSuccessScreen = require('../screens/claims/ClaimSuccessScreen').ClaimSuccessScreen; } catch { ClaimSuccessScreen = () => <PlaceholderScreen name="ส่งเคลมสำเร็จ" />; }
 try { ClaimHistoryScreen = require('../screens/claims/ClaimHistoryScreen').ClaimHistoryScreen; } catch { ClaimHistoryScreen = () => <PlaceholderScreen name="ประวัติการเคลม" />; }
 try { ClaimSubmittingScreen = require('../screens/claims/ClaimSubmittingScreen').ClaimSubmittingScreen; } catch { ClaimSubmittingScreen = () => <PlaceholderScreen name="กำลังส่งข้อมูล" />; }
@@ -36,10 +34,9 @@ export function ClaimsStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ClaimStart" component={ClaimStartScreen} />
       <Stack.Screen name="ClaimDetails" component={ClaimDetailsScreen} />
-      <Stack.Screen name="ClaimAmount" component={ClaimAmountScreen} />
       <Stack.Screen name="ClaimDocs" component={ClaimDocsScreen} />
-      <Stack.Screen name="ClaimPayment" component={ClaimPaymentScreen} />
       <Stack.Screen name="ClaimReview" component={ClaimReviewScreen} />
+      <Stack.Screen name="ClaimOtp" component={ClaimOtpScreen} />
       <Stack.Screen name="ClaimSuccess" component={ClaimSuccessScreen} />
       <Stack.Screen name="ClaimHistory" component={ClaimHistoryScreen} />
       <Stack.Screen name="ClaimSubmitting" component={ClaimSubmittingScreen} />

@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -30,7 +31,9 @@ const STEP = 1;
 export function ClaimDetailsScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
-  const [amount, setAmount] = useState('18,500');
+  const [amount, setAmount] = useState('1,256.00');
+  const [category, setCategory] = useState<'medical' | 'daily'>('medical');
+  const [cause, setCause] = useState<'illness' | 'accident'>('illness');
   const s = useStrings();
   const language = useAppStore((state) => state.language);
 
@@ -46,99 +49,19 @@ export function ClaimDetailsScreen() {
           gap: cardGap,
         }}
       >
-        {/* Helper text */}
-        <Text
-          style={{
-            fontFamily: fontFamily.anuphan.regular,
-            fontSize: fontSize.caption,
-            color: colors.textSecondary,
-          }}
-        >
-          {language === 'en' ? 'Easy, fast and complete claim filing' : 'กรอกรายละเอียดการเคลม ง่าย เร็ว เต็มเม็ด'}
-        </Text>
-
-        {/* Form Card */}
-        <View
-          style={{
-            backgroundColor: colors.card,
-            borderRadius: radius.card,
-            paddingHorizontal: cardPadding,
-            ...cardShadow,
-          }}
-        >
-          {/* วันที่รับบริการ */}
-          <DropdownRow
-            label={s.claims.visitDate}
-            value="15 ส.ค. 2569"
-            rightIcon="calendar-today"
-            onPress={() => {}}
-          />
+        {/* ── เลือกกรมธรรม์ ──────────────────────────────────── */}
+        <SectionCard title={s.claims.selectPolicyTitle}>
+          <DropdownRow label={s.claims.policyNoDropdown} value="TXXXXXXXXX-ประกันกลุ่ม" rightIcon="expand-more" onPress={() => {}} />
           <Divider />
-
-          {/* ผู้รับเคลม */}
           <DropdownRow
-            label={s.claims.claimant}
+            label={s.claims.insuredPerson}
             value={language === 'en' ? 'Somchai Jaidee' : 'สมชาย ใจดี'}
             rightIcon="expand-more"
             onPress={() => {}}
           />
-          <Divider />
+        </SectionCard>
 
-          {/* ประเภทการเคลม */}
-          <DropdownRow
-            label={s.claims.claimType}
-            value={language === 'en' ? 'Out-patient Treatment' : 'ค่ารักษาผู้ป่วยนอก'}
-            rightIcon="expand-more"
-            onPress={() => {}}
-          />
-          <Divider />
-
-          {/* ประกันอะไร */}
-          <DropdownRow
-            label={language === 'en' ? 'Coverage Type' : 'ประกันอะไร'}
-            value={language === 'en' ? 'Specialist Out-patient' : 'ผู้ป่วยนอกเฉพาะทาง'}
-            rightIcon="expand-more"
-            onPress={() => {}}
-          />
-          <Divider />
-
-          {/* จำนวนเงินที่เคลม — navigates to ClaimAmount */}
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('ClaimAmount')}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingVertical: 14,
-              gap: 10,
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  fontFamily: fontFamily.anuphan.regular,
-                  fontSize: fontSize.caption,
-                  color: colors.textSecondary,
-                  marginBottom: 2,
-                }}
-              >
-                {s.claims.claimAmount}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: fontFamily.jakarta.semiBold,
-                  fontSize: 17,
-                  color: colors.ink,
-                }}
-              >
-                ฿{amount}
-              </Text>
-            </View>
-            <MaterialIcons name="apps" size={22} color={colors.primary} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Attachment Section */}
+        {/* ── ประเภทการเคลม ──────────────────────────────────── */}
         <View
           style={{
             backgroundColor: colors.card,
@@ -148,85 +71,84 @@ export function ClaimDetailsScreen() {
             ...cardShadow,
           }}
         >
-          {/* Header row: label + count */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text
-              style={{
-                fontFamily: fontFamily.anuphan.semiBold,
-                fontSize: fontSize.bodyMd,
-                color: colors.ink2,
-              }}
-            >
-              {s.claims.attachReceipts}
-            </Text>
-            <Text
-              style={{
-                fontFamily: fontFamily.anuphan.regular,
-                fontSize: fontSize.caption,
-                color: colors.textTertiary,
-              }}
-            >
-              {language === 'en' ? 'Max 5 · Attached' : 'สูงสุด 5 ใบ · แนบแล้ว'}
-            </Text>
-          </View>
-
-          {/* Upload slots row */}
-          <View style={{ flexDirection: 'row', gap: 10 }}>
-            {/* Already-uploaded slot (green check) */}
-            <View
-              style={{
-                width: 64,
-                height: 64,
-                borderRadius: 12,
-                backgroundColor: colors.successTint,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <MaterialIcons name="check-circle" size={28} color={colors.success} />
-            </View>
-            {/* Already-uploaded slot 2 */}
-            <View
-              style={{
-                width: 64,
-                height: 64,
-                borderRadius: 12,
-                backgroundColor: colors.successTint,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <MaterialIcons name="check-circle" size={28} color={colors.success} />
-            </View>
-            {/* Add new slot */}
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={{
-                width: 64,
-                height: 64,
-                borderRadius: 12,
-                borderWidth: 1.5,
-                borderColor: colors.hairline2,
-                borderStyle: 'dashed',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: colors.screenBg,
-                gap: 4,
-              }}
-            >
-              <MaterialIcons name="camera-alt" size={20} color={colors.textTertiary} />
-              <Text
-                style={{
-                  fontFamily: fontFamily.anuphan.regular,
-                  fontSize: 10,
-                  color: colors.textTertiary,
-                }}
-              >
-                {language === 'en' ? 'Add' : 'เพิ่ม'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: fontSize.bodyMd, color: colors.ink2 }}>
+            {s.claims.claimCategoryTitle}
+          </Text>
+          <SelectableRow
+            label={s.claims.claimCategoryMedical}
+            selected={category === 'medical'}
+            onPress={() => setCategory('medical')}
+          />
+          <SelectableRow
+            label={s.claims.claimCategoryDaily}
+            selected={category === 'daily'}
+            onPress={() => setCategory('daily')}
+          />
         </View>
+
+        {/* ── กรอกรายละเอียดการเคลม ──────────────────────────── */}
+        <SectionCard title={language === 'en' ? 'Treatment Details' : 'กรอกรายละเอียดการเคลม'}>
+          <DropdownRow label={s.claims.treatmentTypeLabel} value={s.claims.treatmentOPD} rightIcon="expand-more" onPress={() => {}} />
+          <Divider />
+
+          <View style={{ paddingVertical: 12, gap: 10 }}>
+            <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: fontSize.caption, color: colors.textSecondary }}>
+              {s.claims.treatmentCauseLabel}
+            </Text>
+            <View style={{ flexDirection: 'row', gap: 10 }}>
+              <CauseOption
+                label={s.claims.causeIllness}
+                icon="sick"
+                selected={cause === 'illness'}
+                onPress={() => setCause('illness')}
+              />
+              <CauseOption
+                label={s.claims.causeAccident}
+                icon="personal-injury"
+                selected={cause === 'accident'}
+                onPress={() => setCause('accident')}
+              />
+            </View>
+          </View>
+          <Divider />
+
+          <DropdownRow label={s.claims.illnessCauseLabel} value={language === 'en' ? 'Flu' : 'ไข้หวัด'} rightIcon="expand-more" onPress={() => {}} />
+          <Divider />
+          <DropdownRow label={s.claims.treatmentDate} value="7 พ.ค. 2566" rightIcon="calendar-today" onPress={() => {}} />
+          <Divider />
+          <DropdownRow
+            label={s.claims.hospitalNameLabel}
+            value={language === 'en' ? 'Bangkok Christian Hospital' : 'รพ.กรุงเทพคริสเตียน'}
+            rightIcon="expand-more"
+            onPress={() => {}}
+          />
+          <Divider />
+
+          {/* Amount */}
+          <View style={{ paddingVertical: 14, gap: 6 }}>
+            <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: fontSize.caption, color: colors.textSecondary }}>
+              {s.claims.receiptAmountLabel}
+            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
+              <Text style={{ fontFamily: fontFamily.jakarta.semiBold, fontSize: 17, color: colors.ink }}>฿</Text>
+              <TextInput
+                value={amount}
+                onChangeText={setAmount}
+                keyboardType="numeric"
+                style={{
+                  fontFamily: fontFamily.jakarta.semiBold,
+                  fontSize: 17,
+                  color: colors.ink,
+                  padding: 0,
+                }}
+              />
+            </View>
+          </View>
+        </SectionCard>
+
+        <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 11, color: colors.textTertiary, lineHeight: 16 }}>
+          {s.claims.maxClaimNote}
+        </Text>
       </ScrollView>
 
       {/* Sticky Bottom Button */}
@@ -264,6 +186,114 @@ export function ClaimDetailsScreen() {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+  );
+}
+
+function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <View
+      style={{
+        backgroundColor: colors.card,
+        borderRadius: radius.card,
+        paddingHorizontal: cardPadding,
+        ...cardShadow,
+      }}
+    >
+      <Text
+        style={{
+          fontFamily: fontFamily.anuphan.semiBold,
+          fontSize: fontSize.bodyMd,
+          color: colors.ink2,
+          paddingTop: 14,
+          paddingBottom: 2,
+        }}
+      >
+        {title}
+      </Text>
+      {children}
+    </View>
+  );
+}
+
+function SelectableRow({ label, selected, onPress }: { label: string; selected: boolean; onPress: () => void }) {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.75}
+      onPress={onPress}
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        backgroundColor: selected ? colors.primaryTint : colors.screenBg,
+        borderRadius: radius.button,
+        borderWidth: 1,
+        borderColor: selected ? colors.primary : colors.hairline2,
+        padding: 12,
+      }}
+    >
+      <View
+        style={{
+          width: 18,
+          height: 18,
+          borderRadius: 9,
+          borderWidth: 1.5,
+          borderColor: selected ? colors.primary : colors.textTertiary,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {selected && <View style={{ width: 9, height: 9, borderRadius: 4.5, backgroundColor: colors.primary }} />}
+      </View>
+      <Text style={{ flex: 1, fontFamily: fontFamily.anuphan.regular, fontSize: 12.5, color: colors.ink2, lineHeight: 17 }}>
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
+function CauseOption({
+  label,
+  icon,
+  selected,
+  onPress,
+}: {
+  label: string;
+  icon: keyof typeof MaterialIcons.glyphMap;
+  selected: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.75}
+      onPress={onPress}
+      style={{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        backgroundColor: selected ? colors.primaryTint : colors.screenBg,
+        borderRadius: radius.button,
+        borderWidth: 1,
+        borderColor: selected ? colors.primary : colors.hairline2,
+        padding: 12,
+      }}
+    >
+      <View
+        style={{
+          width: 16,
+          height: 16,
+          borderRadius: 8,
+          borderWidth: 1.5,
+          borderColor: selected ? colors.primary : colors.textTertiary,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {selected && <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: colors.primary }} />}
+      </View>
+      <MaterialIcons name={icon} size={18} color={selected ? colors.primary : colors.textSecondary} />
+      <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: 12.5, color: colors.ink2 }}>{label}</Text>
+    </TouchableOpacity>
   );
 }
 
