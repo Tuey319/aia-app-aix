@@ -147,3 +147,12 @@ export async function markNotificationRead(id: string): Promise<void> {
     // best-effort: local UI state already updated optimistically by the caller
   }
 }
+
+export async function dismissNotification(id: string): Promise<void> {
+  if (!NOTIFICATIONS_BASE_URL) return;
+  try {
+    await fetch(`${NOTIFICATIONS_BASE_URL}/api/notifications/${encodeURIComponent(id)}/dismiss`, { method: 'POST' });
+  } catch {
+    // best-effort: local UI state already updated optimistically by the caller
+  }
+}

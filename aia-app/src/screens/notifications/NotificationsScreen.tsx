@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, fontFamily, screenPadding } from '../../tokens';
 import { useAppStore } from '../../store';
-import { fetchNotifications, markNotificationRead } from '../../api/notifications';
+import { fetchNotifications, markNotificationRead, dismissNotification } from '../../api/notifications';
 import {
   Notification,
   NotificationIntent,
@@ -31,16 +31,22 @@ function NotificationCard({
   notification,
   language,
   onPress,
+  onDismiss,
 }: {
   notification: Notification;
   language: string;
   onPress: () => void;
+  onDismiss: () => void;
 }) {
   const meta = INTENT_META[notification.intent];
   const title       = language === 'en' ? notification.titleEn       : notification.titleTh;
   const body        = language === 'en' ? notification.bodyEn        : notification.bodyTh;
   const actionLabel = language === 'en' ? notification.actionLabelEn : notification.actionLabelTh;
   const isUnread    = !notification.isRead;
+  // High-confidence predictions get a quiet "worth your attention" cue --
+  // deliberately not showing the raw model score, since a percentage means
+  // nothing reassuring to a customer; it's a curation signal, not a stat.
+  const isPriority  = confidenceLabel(notification.confidence) === 'high';
 
   return (
     <Pressable
@@ -95,12 +101,17 @@ function NotificationCard({
             >
               {title}
             </Text>
-            <Text style={{ fontFamily: fontFamily.jakarta.regular, fontSize: 10, color: '#9CA3AF', marginTop: 2, flexShrink: 0 }}>
-              {timeAgo(notification.createdAt, language)}
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+              <Text style={{ fontFamily: fontFamily.jakarta.regular, fontSize: 10, color: '#9CA3AF', marginTop: 2 }}>
+                {timeAgo(notification.createdAt, language)}
+              </Text>
+              <TouchableOpacity onPress={onDismiss} hitSlop={10}>
+                <MaterialIcons name="close" size={16} color="#C4C9D1" />
+              </TouchableOpacity>
+            </View>
           </View>
 
-          {/* Intent label + policy */}
+          {/* Intent label + policy + priority cue */}
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <Text style={{ fontFamily: fontFamily.jakarta.semiBold, fontSize: 10, color: colors.primary }}>
               {language === 'en' ? meta.labelEn : meta.labelTh}
@@ -109,6 +120,14 @@ function NotificationCard({
             <Text style={{ fontFamily: fontFamily.jakarta.regular, fontSize: 10, color: '#9CA3AF', letterSpacing: 0.4 }}>
               {notification.policyNo}
             </Text>
+            {isPriority && (
+              <>
+                <View style={{ width: 3, height: 3, borderRadius: 2, backgroundColor: '#D1D5DB' }} />
+                <Text style={{ fontFamily: fontFamily.jakarta.semiBold, fontSize: 10, color: '#D32F2F' }}>
+                  {language === 'en' ? 'Worth a look' : 'ควรดูก่อน'}
+                </Text>
+              </>
+            )}
           </View>
 
           {/* Body */}
@@ -175,9 +194,11 @@ export function NotificationsScreen() {
       .then((fetched) => {
         if (!cancelled) setNotifications(fetched);
       })
-      .catch(() => {
-        // aia-call-intelligence-service unreachable (not running / wrong LAN IP / offline) --
-        // fall back to stub data so the screen still demos.
+      .catch((err) => {
+        // aia-call-intelligence-service unreachable (not running / wrong URL / offline) --
+        // fall back to stub data so the screen still demos. Not surfaced to the
+        // customer (a "can't reach server" toast isn't delightful); logged for us.
+        console.warn('[notifications] falling back to stub data:', err);
         if (!cancelled) {
           setNotifications(STUB_NOTIFICATIONS);
           setUsingFallback(true);
@@ -190,8 +211,11 @@ export function NotificationsScreen() {
   }, []);
 
   const filtered     = activeFilter === 'all' ? notifications : notifications.filter((n) => n.intent === activeFilter);
-  const unread       = filtered.filter((n) => !n.isRead);
-  const read         = filtered.filter((n) => n.isRead);
+  // Most-worth-your-attention first within each group -- a customer with 5
+  // notifications should see the one that actually matters before the routine ones.
+  const byPriority   = (a: Notification, b: Notification) => b.confidence - a.confidence;
+  const unread       = filtered.filter((n) => !n.isRead).sort(byPriority);
+  const read         = filtered.filter((n) => n.isRead).sort(byPriority);
   const unreadCount  = notifications.filter((n) => !n.isRead).length;
 
   function markRead(id: string) {
@@ -200,7 +224,14 @@ export function NotificationsScreen() {
   }
 
   function markAllRead() {
+    const unreadIds = notifications.filter((n) => !n.isRead).map((n) => n.id);
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    if (!usingFallback) unreadIds.forEach((id) => markNotificationRead(id));
+  }
+
+  function dismiss(id: string) {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    if (!usingFallback) dismissNotification(id);
   }
 
   function handlePress(n: Notification) {
@@ -341,7 +372,7 @@ export function NotificationsScreen() {
               </Text>
             </View>
             {unread.map((n) => (
-              <NotificationCard key={n.id} notification={n} language={language} onPress={() => handlePress(n)} />
+              <NotificationCard key={n.id} notification={n} language={language} onPress={() => handlePress(n)} onDismiss={() => dismiss(n.id)} />
             ))}
           </>
         )}
@@ -357,7 +388,7 @@ export function NotificationsScreen() {
               <View style={{ flex: 1, height: 1, backgroundColor: '#E5E7EB' }} />
             </View>
             {read.map((n) => (
-              <NotificationCard key={n.id} notification={n} language={language} onPress={() => handlePress(n)} />
+              <NotificationCard key={n.id} notification={n} language={language} onPress={() => handlePress(n)} onDismiss={() => dismiss(n.id)} />
             ))}
           </>
         )}
