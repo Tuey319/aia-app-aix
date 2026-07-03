@@ -17,8 +17,8 @@ const CROSS_STACK_ROUTES: Record<string, (nav: any) => void> = {
   PaySelect:    (nav) => nav.navigate('HomeTab', { screen: 'PaySelect' }),
   Costs:        (nav) => nav.navigate('HomeTab', { screen: 'Costs' }),
   Vitality:     (nav) => nav.navigate('PolicyTab', { screen: 'Vitality' }),
-  ClaimHistory: (nav) => nav.navigate('CenterTab', { screen: 'ClaimHistory' }),
-  ClaimStart:   (nav) => nav.navigate('CenterTab', { screen: 'ClaimStart' }),
+  ClaimHistory: (nav) => nav.navigate('ClaimsTab', { screen: 'ClaimHistory' }),
+  ClaimStart:   (nav) => nav.navigate('ClaimsTab', { screen: 'ClaimStart' }),
   Benefits:     (nav) => nav.navigate('BenefitsTab'),
 };
 

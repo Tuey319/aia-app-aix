@@ -20,7 +20,7 @@ type Nav = NativeStackNavigationProp<any>;
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 60;
 
-export function ClaimOtpScreen() {
+export function FreqOtpScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
   const s = useStrings();
@@ -44,8 +44,6 @@ export function ClaimOtpScreen() {
     if (clean && index < OTP_LENGTH - 1) {
       inputs.current[index + 1]?.focus();
     } else if (clean && index === OTP_LENGTH - 1) {
-      // Last digit filled -- nothing left to type, so close the keyboard
-      // instead of leaving it open and hiding the Send button behind it.
       inputs.current[index]?.blur();
       Keyboard.dismiss();
     }
@@ -61,16 +59,7 @@ export function ClaimOtpScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: screenPadding,
-          paddingTop: 12,
-          paddingBottom: 16,
-          gap: 8,
-        }}
-      >
+      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: screenPadding, paddingTop: 12, paddingBottom: 16, gap: 8 }}>
         <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={16}>
           <MaterialIcons name="arrow-back-ios" size={20} color={colors.ink} />
         </TouchableOpacity>
@@ -118,13 +107,7 @@ export function ClaimOtpScreen() {
 
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <TouchableOpacity disabled={secondsLeft > 0} onPress={() => setSecondsLeft(RESEND_SECONDS)}>
-              <Text
-                style={{
-                  fontFamily: fontFamily.anuphan.medium,
-                  fontSize: fontSize.caption,
-                  color: secondsLeft > 0 ? colors.textTertiary : colors.primary,
-                }}
-              >
+              <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: fontSize.caption, color: secondsLeft > 0 ? colors.textTertiary : colors.primary }}>
                 {secondsLeft > 0 ? `${s.claims.otpResend} (${secondsLeft})` : s.claims.otpResend}
               </Text>
             </TouchableOpacity>
@@ -153,8 +136,8 @@ export function ClaimOtpScreen() {
           activeOpacity={0.85}
           disabled={!complete}
           onPress={() => {
-            navigation.navigate('ClaimSubmitting');
-            setTimeout(() => navigation.navigate('ClaimSuccess'), 2500);
+            navigation.navigate('FreqSubmitting');
+            setTimeout(() => navigation.navigate('FreqSuccess'), 1800);
           }}
           style={{
             backgroundColor: complete ? colors.primary : colors.hairline2,
@@ -165,13 +148,7 @@ export function ClaimOtpScreen() {
             ...(complete ? primaryButtonShadow : {}),
           }}
         >
-          <Text
-            style={{
-              color: complete ? colors.white : colors.textTertiary,
-              fontFamily: fontFamily.anuphan.bold,
-              fontSize: 16,
-            }}
-          >
+          <Text style={{ color: complete ? colors.white : colors.textTertiary, fontFamily: fontFamily.anuphan.bold, fontSize: 16 }}>
             {s.claims.otpSendBtn}
           </Text>
         </TouchableOpacity>

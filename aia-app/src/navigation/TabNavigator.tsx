@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, Text, Platform } from 'react-native';
+import { Text, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { MainTabParamList } from './types';
 import { HomeStack } from './HomeStack';
 import { PolicyStack } from './PolicyStack';
+import { VitalityStack } from './VitalityStack';
 import { ClaimsStack } from './ClaimsStack';
 import { AccountStack } from './AccountStack';
-import { PlaceholderScreen } from '../screens/PlaceholderScreen';
 import { BenefitsScreen } from '../screens/benefits/BenefitsScreen';
 import { colors, fontFamily } from '../tokens';
-import { primaryButtonShadow } from '../tokens/shadows';
+import { AiaLogo } from '../components/AiaLogo';
 import { useStrings } from '../i18n';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -20,26 +20,6 @@ function TabLabel({ label, focused }: { label: string; focused: boolean }) {
     <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: 10, color: focused ? colors.primary : colors.textSecondary, marginTop: 2 }}>
       {label}
     </Text>
-  );
-}
-
-function CenterTabIcon({ focused }: { focused: boolean }) {
-  return (
-    <View
-      style={{
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: focused ? colors.primary : colors.hairline2,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: -18,
-        marginBottom: 0,
-        ...(focused ? primaryButtonShadow : {}),
-      }}
-    >
-      <MaterialIcons name="favorite" size={20} color={focused ? colors.white : colors.textSecondary} />
-    </View>
   );
 }
 
@@ -73,7 +53,7 @@ export function TabNavigator() {
         name="HomeTab"
         component={HomeStack}
         options={{
-          tabBarIcon: ({ focused }) => <MaterialIcons name="home" size={26} color={focused ? colors.primary : colors.textSecondary} />,
+          tabBarIcon: () => <AiaLogo size={24} />,
           tabBarLabel: ({ focused }) => <TabLabel label={s.tabs.home} focused={focused} />,
         }}
       />
@@ -86,11 +66,11 @@ export function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="CenterTab"
-        component={ClaimsStack}
+        name="VitalityTab"
+        component={VitalityStack}
         options={{
-          tabBarIcon: ({ focused }) => <CenterTabIcon focused={focused} />,
-          tabBarLabel: ({ focused }) => <TabLabel label="Vitality" focused={focused} />,
+          tabBarIcon: ({ focused }) => <MaterialIcons name="check-circle-outline" size={24} color={focused ? colors.primary : colors.textSecondary} />,
+          tabBarLabel: ({ focused }) => <TabLabel label={s.tabs.vitality} focused={focused} />,
         }}
       />
       <Tab.Screen
@@ -107,6 +87,16 @@ export function TabNavigator() {
         options={{
           tabBarIcon: ({ focused }) => <MaterialIcons name="person-outline" size={24} color={focused ? colors.primary : colors.textSecondary} />,
           tabBarLabel: ({ focused }) => <TabLabel label={s.tabs.account} focused={focused} />,
+        }}
+      />
+      {/* Hidden tab: no visible button, but mounted so Home's "claim" quick
+          action can navigate here via navigation.navigate('ClaimsTab', {...}). */}
+      <Tab.Screen
+        name="ClaimsTab"
+        component={ClaimsStack}
+        options={{
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: 'none' },
         }}
       />
     </Tab.Navigator>

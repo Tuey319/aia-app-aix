@@ -183,6 +183,30 @@ export function AccountScreen() {
             />
           </SectionGroup>
 
+          {/* Ask assistant CTA */}
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate('Assistant')}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: colors.card,
+              borderRadius: radius.card,
+              padding: 14,
+              gap: 12,
+              ...cardShadow,
+            }}
+          >
+            <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' }}>
+              <MaterialIcons name="support-agent" size={22} color={colors.primary} />
+            </View>
+            <View style={{ flex: 1, gap: 1 }}>
+              <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 13, color: colors.ink }}>{s.account.askAssistant}</Text>
+              <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 11, color: colors.textSecondary }}>{s.account.askAssistantSub}</Text>
+            </View>
+            <MaterialIcons name="chevron-right" size={20} color={colors.textTertiary} />
+          </TouchableOpacity>
+
           {/* Section: เกี่ยวกับ AIA+ */}
           <SectionGroup label={s.account.aboutSection}>
             <ListRow
@@ -198,6 +222,26 @@ export function AccountScreen() {
             <ListRow
               icon="description"
               title={s.account.terms}
+              onPress={() => {}}
+            />
+            <ListRow
+              icon="privacy-tip"
+              title={s.account.privacyStatement}
+              onPress={() => {}}
+            />
+            <ListRow
+              icon="campaign"
+              title={s.account.directMarketingUse}
+              onPress={() => {}}
+            />
+            <ListRow
+              icon="menu-book"
+              title={s.account.userGuide}
+              onPress={() => {}}
+            />
+            <ListRow
+              icon="person-remove"
+              title={s.account.deleteAccount}
               onPress={() => {}}
             />
           </SectionGroup>

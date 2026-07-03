@@ -13,6 +13,9 @@ let FaqSearchScreen: React.ComponentType<any>;
 let FaqAnswerScreen: React.ComponentType<any>;
 let ChangeFreqScreen: React.ComponentType<any>;
 let FreqConfirmScreen: React.ComponentType<any>;
+let FreqOtpScreen: React.ComponentType<any>;
+let FreqSubmittingScreen: React.ComponentType<any>;
+let FreqSuccessScreen: React.ComponentType<any>;
 let ContactAgentScreen: React.ComponentType<any>;
 let SearchLoadingScreen: React.ComponentType<any>;
 let AssistantScreen: React.ComponentType<any>;
@@ -25,6 +28,9 @@ try { FaqSearchScreen = require('../screens/support/FaqSearchScreen').FaqSearchS
 try { FaqAnswerScreen = require('../screens/support/FaqAnswerScreen').FaqAnswerScreen; } catch { FaqAnswerScreen = () => <PlaceholderScreen name="คำตอบ" />; }
 try { ChangeFreqScreen = require('../screens/support/ChangeFreqScreen').ChangeFreqScreen; } catch { ChangeFreqScreen = () => <PlaceholderScreen name="เปลี่ยนงวดชำระ" />; }
 try { FreqConfirmScreen = require('../screens/support/FreqConfirmScreen').FreqConfirmScreen; } catch { FreqConfirmScreen = () => <PlaceholderScreen name="ยืนยันการเปลี่ยน" />; }
+try { FreqOtpScreen = require('../screens/support/FreqOtpScreen').FreqOtpScreen; } catch { FreqOtpScreen = () => <PlaceholderScreen name="ใส่รหัส OTP" />; }
+try { FreqSubmittingScreen = require('../screens/support/FreqSubmittingScreen').FreqSubmittingScreen; } catch { FreqSubmittingScreen = () => <PlaceholderScreen name="กำลังดำเนินการ" />; }
+try { FreqSuccessScreen = require('../screens/support/FreqSuccessScreen').FreqSuccessScreen; } catch { FreqSuccessScreen = () => <PlaceholderScreen name="สำเร็จ" />; }
 try { ContactAgentScreen = require('../screens/support/ContactAgentScreen').ContactAgentScreen; } catch { ContactAgentScreen = () => <PlaceholderScreen name="ติดต่อเจ้าหน้าที่" />; }
 try { SearchLoadingScreen = require('../screens/system/SearchLoadingScreen').SearchLoadingScreen; } catch { SearchLoadingScreen = () => <PlaceholderScreen name="กำลังค้นหา" />; }
 try { AssistantScreen = require('../screens/assistant/AssistantScreen').AssistantScreen; } catch { AssistantScreen = () => <PlaceholderScreen name="ผู้ช่วย AIA" />; }
@@ -39,8 +45,10 @@ export function AccountStack() {
       <Stack.Screen name="FaqSearch" component={FaqSearchScreen} />
       <Stack.Screen name="FaqAnswer" component={FaqAnswerScreen} />
       <Stack.Screen name="ChangeFreq" component={ChangeFreqScreen} />
-      <Stack.Screen name="FreqConfirm" component={FreqConfirmScreen}
-        options={{ presentation: 'transparentModal', animation: 'slide_from_bottom' }} />
+      <Stack.Screen name="FreqConfirm" component={FreqConfirmScreen} />
+      <Stack.Screen name="FreqOtp" component={FreqOtpScreen} />
+      <Stack.Screen name="FreqSubmitting" component={FreqSubmittingScreen} />
+      <Stack.Screen name="FreqSuccess" component={FreqSuccessScreen} />
       <Stack.Screen name="ContactAgent" component={ContactAgentScreen} />
       <Stack.Screen name="SearchLoading" component={SearchLoadingScreen} />
       <Stack.Screen name="Assistant" component={AssistantScreen} />

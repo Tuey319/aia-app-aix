@@ -27,6 +27,7 @@ const COVERAGE_CATEGORIES = [
   { key: 'criticalIllnessEarly' as const, icon: 'favorite' as const, iconColor: '#E0527A', bg: '#FDE8EC', amount: '500,000' },
   { key: 'criticalIllnessSevere' as const, icon: 'medical-services' as const, iconColor: '#2E8FD9', bg: '#E3F1FC', amount: null },
   { key: 'accident' as const, icon: 'personal-injury' as const, iconColor: colors.amber, bg: colors.amberTint, amount: '150,000' },
+  { key: 'dailyCompensation' as const, icon: 'event-note' as const, iconColor: colors.info, bg: colors.infoTint, amount: '2,000' },
 ];
 
 const QUICK_ACTIONS = [
@@ -83,7 +84,9 @@ export function PolicyScreen() {
       >
         {/* ── Coverage summary + view-all row ───────────────────── */}
         <View style={{ flexDirection: 'row', gap: 12 }}>
-          <View
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('PolicyDetail')}
             style={{
               flex: 1.4,
               backgroundColor: colors.card,
@@ -124,9 +127,11 @@ export function PolicyScreen() {
                 {policy.policyNo}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
-          <View
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('AllPolicies')}
             style={{
               flex: 1,
               backgroundColor: colors.card,
@@ -154,7 +159,7 @@ export function PolicyScreen() {
               </Text>
               <MaterialIcons name="arrow-forward" size={16} color={colors.primary} />
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* ── Quick actions row ─────────────────────────────────── */}

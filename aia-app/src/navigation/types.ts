@@ -9,13 +9,21 @@ export type RootStackParamList = {
 export type MainTabParamList = {
   HomeTab: NavigatorScreenParams<HomeStackParamList>;
   PolicyTab: NavigatorScreenParams<PolicyStackParamList>;
-  CenterTab: NavigatorScreenParams<ClaimsStackParamList>;
+  VitalityTab: NavigatorScreenParams<VitalityStackParamList>;
   BenefitsTab: undefined;
   AccountTab: NavigatorScreenParams<AccountStackParamList>;
+  // Hidden tab (no visible tab-bar button) -- mounted so cross-tab
+  // navigation (e.g. Home's "claim" quick action) can reach it.
+  ClaimsTab: NavigatorScreenParams<ClaimsStackParamList>;
+};
+
+export type VitalityStackParamList = {
+  Vitality: undefined;
 };
 
 export type HomeStackParamList = {
   Home: undefined;
+  AllServices: undefined;
   // Premium Management
   PremiumMgmt: undefined;
   Affordability: undefined;
@@ -27,7 +35,6 @@ export type HomeStackParamList = {
   Costs: undefined;
   Recommend: undefined;
   History: undefined;
-  HistoryFiltered: undefined;
   // Payment flow
   PaySelect: undefined;
   PayCoverage: undefined;
@@ -66,6 +73,14 @@ export type PolicyStackParamList = {
   CoverageDetail: undefined;
   Vitality: undefined;
   EmptyPolicies: undefined;
+  AllPolicies: undefined;
+  PolicyDetail: undefined;
+  PremiumPaymentInfo: undefined;
+  ChangeFreq: undefined;
+  FreqConfirm: undefined;
+  FreqOtp: undefined;
+  FreqSubmitting: undefined;
+  FreqSuccess: undefined;
 };
 
 export type ClaimsStackParamList = {
@@ -91,6 +106,9 @@ export type AccountStackParamList = {
   FaqAnswer: undefined;
   ChangeFreq: undefined;
   FreqConfirm: undefined;
+  FreqOtp: undefined;
+  FreqSubmitting: undefined;
+  FreqSuccess: undefined;
   ContactAgent: undefined;
   SearchLoading: undefined;
   Assistant: undefined;

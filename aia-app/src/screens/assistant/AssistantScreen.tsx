@@ -76,7 +76,7 @@ function detectMessageLanguage(text: string, fallback: 'th' | 'en'): 'th' | 'en'
 const SCREEN_TABS: Record<string, string> = {
   PaySelect: 'HomeTab',
   History: 'HomeTab',
-  ClaimStart: 'CenterTab',
+  ClaimStart: 'ClaimsTab',
   CoverageDetail: 'PolicyTab',
   Policy: 'PolicyTab',
   Vitality: 'PolicyTab',

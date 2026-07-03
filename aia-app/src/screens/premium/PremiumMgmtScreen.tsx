@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -27,38 +27,40 @@ export function PremiumMgmtScreen() {
   const pctOfIncome = ((policy.monthlyPremium * 12) / (income * 12) * 100).toFixed(0);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
-      {/* Header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: screenPadding, paddingTop: 12, paddingBottom: 16, gap: 8 }}>
-        <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={16}>
-          <MaterialIcons name="arrow-back-ios" size={20} color={colors.ink} />
-        </TouchableOpacity>
-        <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 17, color: colors.ink, flex: 1 }}>
-          {s.premiumMgmt.title}
-        </Text>
+    <View style={{ flex: 1, backgroundColor: colors.screenBg }}>
+      {/* Red header bar — matches Policy section theme */}
+      <View style={{ backgroundColor: colors.primary, paddingTop: insets.top + 12, paddingBottom: 16 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: screenPadding, gap: 8 }}>
+          <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={16}>
+            <MaterialIcons name="arrow-back-ios" size={20} color={colors.white} />
+          </TouchableOpacity>
+          <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 17, color: colors.white, flex: 1 }}>
+            {s.premiumMgmt.title}
+          </Text>
 
-        {/* Language toggle */}
-        <View style={{ flexDirection: 'row', backgroundColor: colors.hairline2, borderRadius: radius.pill, padding: 3, gap: 2 }}>
-          <TouchableOpacity
-            onPress={() => setLanguage('th')}
-            style={{ paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, backgroundColor: language === 'th' ? colors.primary : 'transparent' }}
-          >
-            <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: 12, color: language === 'th' ? colors.white : colors.textSecondary }}>
-              ไทย
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setLanguage('en')}
-            style={{ paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, backgroundColor: language === 'en' ? colors.primary : 'transparent' }}
-          >
-            <Text style={{ fontFamily: fontFamily.jakarta.semiBold, fontSize: 12, color: language === 'en' ? colors.white : colors.textSecondary }}>
-              EN
-            </Text>
-          </TouchableOpacity>
+          {/* Language toggle */}
+          <View style={{ flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: radius.pill, padding: 3, gap: 2 }}>
+            <TouchableOpacity
+              onPress={() => setLanguage('th')}
+              style={{ paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, backgroundColor: language === 'th' ? colors.white : 'transparent' }}
+            >
+              <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: 12, color: language === 'th' ? colors.primary : 'rgba(255,255,255,0.75)' }}>
+                ไทย
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setLanguage('en')}
+              style={{ paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.pill, backgroundColor: language === 'en' ? colors.white : 'transparent' }}
+            >
+              <Text style={{ fontFamily: fontFamily.jakarta.semiBold, fontSize: 12, color: language === 'en' ? colors.primary : 'rgba(255,255,255,0.75)' }}>
+                EN
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: screenPadding, paddingBottom: insets.bottom + 32, gap: cardGap }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: screenPadding, paddingTop: 16, paddingBottom: insets.bottom + 32, gap: cardGap }}>
         {/* 1. Primary Payment Card */}
         <View style={{ backgroundColor: colors.card, borderRadius: radius.cardLg, padding: 18, gap: 12, ...cardShadow }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -121,6 +123,6 @@ export function PremiumMgmtScreen() {
           <ListRow icon="receipt-long" title={s.premiumMgmt.rowHistory} subtitle={s.premiumMgmt.rowHistorySub} onPress={() => navigation.navigate('History')} />
         </SectionGroup>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }

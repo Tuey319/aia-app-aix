@@ -19,6 +19,13 @@ import { colors, fontFamily, radius, screenPadding } from '../tokens';
 import { cardShadow, primaryButtonShadow } from '../tokens/shadows';
 import { StatusPill } from '../components/StatusPill';
 import { AiaLogo } from '../components/AiaLogo';
+import {
+  IllustrationCoinsDrop,
+  IllustrationMedicine,
+  IllustrationBeHealthy,
+  IllustrationHospital,
+  IllustrationHealthInsurance,
+} from '../components/illustrations';
 import { useAppStore } from '../store';
 import { useStrings } from '../i18n';
 
@@ -34,13 +41,14 @@ const AD_BANNERS = [
   { id: '3', source: require('../../assets/ad-travel.png') },
 ];
 
-const PARTNERS = [
-  { id: 'bumrungrad', source: require('../../assets/partners/bumrungrad.webp') },
-  { id: 'central', source: require('../../assets/partners/central.webp') },
-  { id: 'agoda', source: require('../../assets/partners/agoda.webp') },
-  { id: 'thai-airways', source: require('../../assets/partners/thai-airways.webp') },
-  { id: 'virgin-active', source: require('../../assets/partners/virgin-active.webp') },
-  { id: 'watson', source: require('../../assets/partners/watson.webp') },
+const PROMO_CARDS = [{ id: '1' }, { id: '2' }, { id: '3' }];
+
+const ARTICLES = [
+  { id: '1', titleKey: 'article1Title' as const, Illustration: IllustrationCoinsDrop },
+  { id: '2', titleKey: 'article2Title' as const, Illustration: IllustrationMedicine },
+  { id: '3', titleKey: 'article3Title' as const, Illustration: IllustrationBeHealthy },
+  { id: '4', titleKey: 'article4Title' as const, Illustration: IllustrationHospital },
+  { id: '5', titleKey: 'article5Title' as const, Illustration: IllustrationHealthInsurance },
 ];
 
 function AdBanner({ source }: { source: number }) {
@@ -73,10 +81,10 @@ export function HomeScreen() {
   const SERVICES = [
     { icon: 'payment' as const,        label: s.home.svcPay,     onPress: () => navigation.navigate('PaySelect') },
     { icon: 'shield' as const,         label: s.home.svcCard,    onPress: () => navigation.navigate('PaySelect') },
-    { icon: 'local-hospital' as const, label: s.home.svcClaim,   onPress: () => navigation.navigate('CenterTab' as any, { screen: 'ClaimStart' } as any) },
+    { icon: 'local-hospital' as const, label: s.home.svcClaim,   onPress: () => navigation.navigate('ClaimsTab' as any, { screen: 'ClaimStart' } as any) },
     { icon: 'location-on' as const,    label: s.home.svcAddress, onPress: () => navigation.navigate('PaySelect') },
     { icon: 'download' as const,       label: s.home.svcDocs,    onPress: () => navigation.navigate('PaySelect') },
-    { icon: 'apps' as const,           label: s.home.svcAll,     onPress: () => navigation.navigate('Assistant') },
+    { icon: 'apps' as const,           label: s.home.svcAll,     onPress: () => navigation.navigate('AllServices') },
   ];
 
   return (
@@ -416,21 +424,43 @@ export function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingHorizontal: screenPadding, gap: 10 }}
           >
-            {PARTNERS.map((p) => (
+            {PROMO_CARDS.map((p) => (
               <View
                 key={p.id}
                 style={{
-                  width: 100,
-                  height: 84,
+                  width: 200,
                   borderRadius: radius.card,
-                  backgroundColor: colors.card,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 12,
-                  ...cardShadow,
+                  backgroundColor: colors.primaryTint,
+                  borderWidth: 1,
+                  borderColor: colors.primaryTintDark,
+                  padding: 14,
+                  gap: 6,
                 }}
               >
-                <Image source={p.source} resizeMode="contain" style={{ width: '100%', height: '100%' }} />
+                <Text
+                  style={{
+                    fontFamily: fontFamily.anuphan.bold,
+                    fontSize: 14,
+                    color: colors.primaryDeep,
+                    lineHeight: 19,
+                  }}
+                >
+                  {s.home.promoCardTitle}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: fontFamily.anuphan.regular,
+                    fontSize: 11,
+                    color: colors.primary,
+                    lineHeight: 15,
+                  }}
+                  numberOfLines={2}
+                >
+                  {s.home.promoCardSub}
+                </Text>
+                <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 10, color: colors.primary, opacity: 0.75, marginTop: 4 }}>
+                  {s.home.promoExpiry('31 ธ.ค. 2567')}
+                </Text>
               </View>
             ))}
           </ScrollView>
@@ -530,6 +560,63 @@ export function HomeScreen() {
                 >
                   {item.label}
                 </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* ── Articles ──────────────────────────────────────────── */}
+        <View style={{ paddingHorizontal: screenPadding, marginTop: 24 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 16, color: colors.ink }}>
+              {s.home.articles}
+            </Text>
+            <TouchableOpacity>
+              <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: 13, color: colors.primary }}>
+                {s.home.viewAll}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ gap: 10 }}>
+            {ARTICLES.map(({ id, titleKey, Illustration }) => (
+              <TouchableOpacity
+                key={id}
+                activeOpacity={0.8}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: colors.card,
+                  borderRadius: radius.card,
+                  padding: 12,
+                  gap: 12,
+                  ...cardShadow,
+                }}
+              >
+                <Text
+                  style={{
+                    flex: 1,
+                    fontFamily: fontFamily.anuphan.semiBold,
+                    fontSize: 13,
+                    color: colors.ink,
+                    lineHeight: 18,
+                  }}
+                  numberOfLines={2}
+                >
+                  {s.home[titleKey]}
+                </Text>
+                <View
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 12,
+                    backgroundColor: colors.screenBg,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Illustration width={64} height={64} />
+                </View>
               </TouchableOpacity>
             ))}
           </View>

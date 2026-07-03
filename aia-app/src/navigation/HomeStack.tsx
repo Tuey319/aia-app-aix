@@ -2,6 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeStackParamList } from './types';
 import { HomeScreen } from '../screens/HomeScreen';
+import { AllServicesScreen } from '../screens/AllServicesScreen';
 import { PremiumMgmtScreen } from '../screens/premium/PremiumMgmtScreen';
 import { IllustrationScreen } from '../screens/premium/IllustrationScreen';
 import { CoverageOverviewScreen } from '../screens/premium/CoverageOverviewScreen';
@@ -17,13 +18,11 @@ let AffordabilityScreen: React.ComponentType<any>;
 let ValueScreen: React.ComponentType<any>;
 let RecommendScreen: React.ComponentType<any>;
 let HistoryScreen: React.ComponentType<any>;
-let HistoryFilteredScreen: React.ComponentType<any>;
 
 try { AffordabilityScreen = require('../screens/premium/AffordabilityScreen').AffordabilityScreen; } catch { AffordabilityScreen = () => <PlaceholderScreen name="สุขภาพการเงิน" />; }
 try { ValueScreen = require('../screens/premium/ValueScreen').ValueScreen; } catch { ValueScreen = () => <PlaceholderScreen name="คุณค่าความคุ้มครอง" />; }
 try { RecommendScreen = require('../screens/premium/RecommendScreen').RecommendScreen; } catch { RecommendScreen = () => <PlaceholderScreen name="คำแนะนำเฉพาะคุณ" />; }
 try { HistoryScreen = require('../screens/premium/HistoryScreen').HistoryScreen; } catch { HistoryScreen = () => <PlaceholderScreen name="ประวัติการชำระ" />; }
-try { HistoryFilteredScreen = require('../screens/premium/HistoryFilteredScreen').HistoryFilteredScreen; } catch { HistoryFilteredScreen = () => <PlaceholderScreen name="ประวัติ (กรอง)" />; }
 
 // Agent-built payment screens
 let PaySelectScreen: React.ComponentType<any>;
@@ -72,6 +71,7 @@ export function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="AllServices" component={AllServicesScreen} />
       {/* Premium Management */}
       <Stack.Screen name="PremiumMgmt" component={PremiumMgmtScreen} />
       <Stack.Screen name="Affordability" component={AffordabilityScreen} />
@@ -83,7 +83,6 @@ export function HomeStack() {
       <Stack.Screen name="Costs" component={CostsScreen} />
       <Stack.Screen name="Recommend" component={RecommendScreen} />
       <Stack.Screen name="History" component={HistoryScreen} />
-      <Stack.Screen name="HistoryFiltered" component={HistoryFilteredScreen} />
       {/* Payment flow */}
       <Stack.Screen name="PaySelect" component={PaySelectScreen} />
       <Stack.Screen name="PayCoverage" component={PayCoverageScreen} />
