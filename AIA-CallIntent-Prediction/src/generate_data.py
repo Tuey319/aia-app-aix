@@ -79,7 +79,7 @@ def gen_customers(n):
 
 def gen_policies(customers):
     rows = []
-    policy_seq = 10000
+    policy_seq = 1000000000
     for c in customers.itertuples():
         for _ in range(c.num_policies):
             policy_seq += 1
