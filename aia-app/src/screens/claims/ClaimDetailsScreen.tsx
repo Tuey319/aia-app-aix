@@ -51,7 +51,7 @@ export function ClaimDetailsScreen() {
       >
         {/* ── เลือกกรมธรรม์ ──────────────────────────────────── */}
         <SectionCard title={s.claims.selectPolicyTitle}>
-          <DropdownRow label={s.claims.policyNoDropdown} value="TXXXXXXXXX-ประกันกลุ่ม" rightIcon="expand-more" onPress={() => {}} />
+          <DropdownRow label={s.claims.policyNoDropdown} value={language === 'en' ? 'TXXXXXXXXX-Group Insurance' : 'TXXXXXXXXX-ประกันกลุ่ม'} rightIcon="expand-more" onPress={() => {}} />
           <Divider />
           <DropdownRow
             label={s.claims.insuredPerson}
@@ -114,7 +114,7 @@ export function ClaimDetailsScreen() {
 
           <DropdownRow label={s.claims.illnessCauseLabel} value={language === 'en' ? 'Flu' : 'ไข้หวัด'} rightIcon="expand-more" onPress={() => {}} />
           <Divider />
-          <DropdownRow label={s.claims.treatmentDate} value="7 พ.ค. 2566" rightIcon="calendar-today" onPress={() => {}} />
+          <DropdownRow label={s.claims.treatmentDate} value={language === 'en' ? '7 May 2023' : '7 พ.ค. 2566'} rightIcon="calendar-today" onPress={() => {}} />
           <Divider />
           <DropdownRow
             label={s.claims.hospitalNameLabel}

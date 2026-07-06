@@ -62,7 +62,7 @@ export function ClaimDeclinedScreen() {
           style={{ backgroundColor: colors.primary, borderRadius: radius.button, height: 52, alignItems: 'center', justifyContent: 'center', ...primaryButtonShadow }}>
           <Text style={{ color: colors.white, fontFamily: fontFamily.anuphan.bold, fontSize: 16 }}>{s.claims.fixAndResubmit}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('ContactAgent')} activeOpacity={0.7}
+        <TouchableOpacity onPress={() => navigation.navigate('AccountTab' as any, { screen: 'ContactAgent' } as any)} activeOpacity={0.7}
           style={{ height: 48, alignItems: 'center', justifyContent: 'center', borderRadius: radius.button, borderWidth: 1.5, borderColor: colors.primary }}>
           <Text style={{ color: colors.primary, fontFamily: fontFamily.anuphan.semiBold, fontSize: 15 }}>{s.claims.contactAgent}</Text>
         </TouchableOpacity>

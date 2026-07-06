@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { HomeStackParamList } from '../../navigation/types';
 import { colors, fontFamily, radius, screenPadding, cardGap } from '../../tokens';
 import { cardShadow, primaryButtonShadow } from '../../tokens/shadows';
+import { useAppStore } from '../../store';
 
 type Nav = NativeStackNavigationProp<HomeStackParamList, 'LifestyleCheck'>;
 type Route = RouteProp<HomeStackParamList, 'LifestyleCheck'>;
@@ -14,24 +15,32 @@ type Route = RouteProp<HomeStackParamList, 'LifestyleCheck'>;
 interface Question {
   id: string;
   question: string;
+  questionEn: string;
   options: string[];
+  optionsEn: string[];
 }
 
 const QUESTIONS: Question[] = [
   {
     id: 'smoking',
     question: 'คุณสูบบุหรี่หรือไม่?',
+    questionEn: 'Do you smoke?',
     options: ['ไม่สูบ', 'สูบเป็นครั้งคราว', 'สูบประจำ'],
+    optionsEn: ['Non-smoker', 'Occasional smoker', 'Regular smoker'],
   },
   {
     id: 'exercise',
     question: 'ออกกำลังกายบ่อยแค่ไหน?',
+    questionEn: 'How often do you exercise?',
     options: ['ไม่ออกกำลังกาย', '1–2 ครั้ง/สัปดาห์', '3 ครั้ง/สัปดาห์ขึ้นไป'],
+    optionsEn: ['No exercise', '1–2 times/week', '3+ times/week'],
   },
   {
     id: 'alcohol',
     question: 'ดื่มแอลกอฮอล์บ่อยแค่ไหน?',
+    questionEn: 'How often do you drink alcohol?',
     options: ['ไม่ดื่ม', 'ดื่มเป็นครั้งคราว', 'ดื่มเป็นประจำ'],
+    optionsEn: ['Non-drinker', 'Occasional drinker', 'Regular drinker'],
   },
 ];
 
@@ -39,6 +48,7 @@ export function LifestyleCheckScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const insets = useSafeAreaInsets();
+  const language = useAppStore((state) => state.language);
 
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
@@ -71,7 +81,7 @@ export function LifestyleCheckScreen() {
             color: colors.ink,
           }}
         >
-          ตรวจสอบไลฟ์สไตล์
+          {language === 'en' ? 'Lifestyle Check' : 'ตรวจสอบไลฟ์สไตล์'}
         </Text>
       </View>
 
@@ -115,7 +125,9 @@ export function LifestyleCheckScreen() {
                 lineHeight: 18,
               }}
             >
-              ก่อนปรับแผนคุ้มครอง ขอทราบไลฟ์สไตล์ปัจจุบันของคุณก่อน เพื่อให้คำแนะนำความคุ้มครองที่เหมาะสมที่สุด
+              {language === 'en'
+                ? 'Before adjusting your coverage, tell us about your current lifestyle so we can recommend the most suitable plan'
+                : 'ก่อนปรับแผนคุ้มครอง ขอทราบไลฟ์สไตล์ปัจจุบันของคุณก่อน เพื่อให้คำแนะนำความคุ้มครองที่เหมาะสมที่สุด'}
             </Text>
           </View>
         </View>
@@ -139,10 +151,10 @@ export function LifestyleCheckScreen() {
                 color: colors.ink2,
               }}
             >
-              {q.question}
+              {language === 'en' ? q.questionEn : q.question}
             </Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-              {q.options.map((opt) => {
+              {(language === 'en' ? q.optionsEn : q.options).map((opt) => {
                 const isSelected = answers[q.id] === opt;
                 return (
                   <TouchableOpacity
@@ -206,7 +218,7 @@ export function LifestyleCheckScreen() {
           }}
         >
           <Text style={{ color: colors.white, fontFamily: fontFamily.anuphan.bold, fontSize: 16 }}>
-            ดำเนินการต่อ
+            {language === 'en' ? 'Continue' : 'ดำเนินการต่อ'}
           </Text>
         </TouchableOpacity>
       </View>

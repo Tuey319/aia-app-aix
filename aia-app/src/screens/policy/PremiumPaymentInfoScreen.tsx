@@ -8,6 +8,7 @@ import { colors, fontFamily, fontSize, radius, screenPadding, cardShadow } from 
 import { primaryButtonShadow } from '../../tokens/shadows';
 import { SpinnerArc } from '../../components/SpinnerArc';
 import { useStrings } from '../../i18n';
+import { useAppStore } from '../../store';
 
 type Nav = NativeStackNavigationProp<any>;
 
@@ -15,6 +16,7 @@ export function PremiumPaymentInfoScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
   const s = useStrings();
+  const language = useAppStore((state) => state.language);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -66,9 +68,9 @@ export function PremiumPaymentInfoScreen() {
           <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 14, color: colors.ink }}>
             {s.policy.paymentInfoSection}
           </Text>
-          <InfoRow label={s.policy.freqLabel} value="รายปี" />
-          <InfoRow label={s.policy.nextDueDateLabel} value="14 ธ.ค. 2565" />
-          <InfoRow label={s.policy.premiumDueLabel} value="60,000.00 บาท" bold />
+          <InfoRow label={s.policy.freqLabel} value={language === 'en' ? 'Annual' : 'รายปี'} />
+          <InfoRow label={s.policy.nextDueDateLabel} value={language === 'en' ? '14 Dec 2022' : '14 ธ.ค. 2565'} />
+          <InfoRow label={s.policy.premiumDueLabel} value={language === 'en' ? '฿60,000.00' : '60,000.00 บาท'} bold />
           <InfoRow label={s.policy.paymentMethodLabel} value={s.policy.selfPay} />
         </View>
 
@@ -83,8 +85,8 @@ export function PremiumPaymentInfoScreen() {
               </Text>
             </TouchableOpacity>
           </View>
-          <InfoRow label={s.policy.lastPaymentDateLabel} value="14 ธ.ค. 2565" />
-          <InfoRow label={s.policy.paymentAmountLabel} value="2,500.55 บาท" />
+          <InfoRow label={s.policy.lastPaymentDateLabel} value={language === 'en' ? '14 Dec 2022' : '14 ธ.ค. 2565'} />
+          <InfoRow label={s.policy.paymentAmountLabel} value={language === 'en' ? '฿2,500.55' : '2,500.55 บาท'} />
           <InfoRow label={s.policy.paymentMethodLabel} value={s.payment.creditCard} />
         </View>
       </ScrollView>

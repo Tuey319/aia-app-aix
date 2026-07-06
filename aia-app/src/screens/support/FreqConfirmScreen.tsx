@@ -44,7 +44,7 @@ export function FreqConfirmScreen() {
         <View style={{ backgroundColor: colors.card, borderRadius: radius.cardLg, paddingHorizontal: 16, ...cardShadow }}>
           <Row label={s.policy.changeToLabel} value={freq.label} highlight />
           <Divider />
-          <Row label={s.policy.newPremiumLabel} value={`${freq.amount} บาท/งวด`} highlight />
+          <Row label={s.policy.newPremiumLabel} value={language === 'en' ? `฿${freq.amount}/period` : `${freq.amount} บาท/งวด`} highlight />
         </View>
 
         <View>

@@ -8,6 +8,7 @@ import { colors, fontFamily, fontSize, radius, screenPadding, cardGap } from '..
 import { cardShadow } from '../../tokens/shadows';
 import { StatusPill } from '../../components/StatusPill';
 import { useStrings } from '../../i18n';
+import { useAppStore } from '../../store';
 
 type FilterType = 'all' | 'bill' | 'policy';
 
@@ -21,60 +22,35 @@ interface PaymentRecord {
   type: 'bill' | 'policy';
 }
 
-const PAYMENTS: PaymentRecord[] = [
-  {
-    id: '1',
-    month: 'มิถุนายน 2569',
-    policyName: 'AIA Health Happy',
-    date: '17 มิ.ย.',
-    method: 'PromptPay',
-    amount: 4250,
-    type: 'bill',
-  },
-  {
-    id: '2',
-    month: 'มิถุนายน 2569',
-    policyName: 'AIA Unit Linked',
-    date: '5 มิ.ย.',
-    method: 'บัตร ••••4242',
-    amount: 8000,
-    type: 'policy',
-  },
-  {
-    id: '3',
-    month: 'พฤษภาคม 2569',
-    policyName: 'AIA Health Happy',
-    date: '17 พ.ค.',
-    method: 'PromptPay',
-    amount: 4250,
-    type: 'bill',
-  },
-  {
-    id: '4',
-    month: 'พฤษภาคม 2569',
-    policyName: 'AIA Unit Linked',
-    date: '5 พ.ค.',
-    method: 'บัตร ••••4242',
-    amount: 8000,
-    type: 'policy',
-  },
-  {
-    id: '5',
-    month: 'เมษายน 2569',
-    policyName: 'AIA Health Happy',
-    date: '17 เม.ย.',
-    method: 'PromptPay',
-    amount: 4250,
-    type: 'bill',
-  },
-];
+function getPayments(language: string): PaymentRecord[] {
+  const cardMethod = language === 'en' ? 'Card ••••4242' : 'บัตร ••••4242';
+  if (language === 'en') {
+    return [
+      { id: '1', month: 'June 2026', policyName: 'AIA Health Happy', date: '17 Jun', method: 'PromptPay', amount: 4250, type: 'bill' },
+      { id: '2', month: 'June 2026', policyName: 'AIA Unit Linked', date: '5 Jun', method: cardMethod, amount: 8000, type: 'policy' },
+      { id: '3', month: 'May 2026', policyName: 'AIA Health Happy', date: '17 May', method: 'PromptPay', amount: 4250, type: 'bill' },
+      { id: '4', month: 'May 2026', policyName: 'AIA Unit Linked', date: '5 May', method: cardMethod, amount: 8000, type: 'policy' },
+      { id: '5', month: 'April 2026', policyName: 'AIA Health Happy', date: '17 Apr', method: 'PromptPay', amount: 4250, type: 'bill' },
+    ];
+  }
+  return [
+    { id: '1', month: 'มิถุนายน 2569', policyName: 'AIA Health Happy', date: '17 มิ.ย.', method: 'PromptPay', amount: 4250, type: 'bill' },
+    { id: '2', month: 'มิถุนายน 2569', policyName: 'AIA Unit Linked', date: '5 มิ.ย.', method: cardMethod, amount: 8000, type: 'policy' },
+    { id: '3', month: 'พฤษภาคม 2569', policyName: 'AIA Health Happy', date: '17 พ.ค.', method: 'PromptPay', amount: 4250, type: 'bill' },
+    { id: '4', month: 'พฤษภาคม 2569', policyName: 'AIA Unit Linked', date: '5 พ.ค.', method: cardMethod, amount: 8000, type: 'policy' },
+    { id: '5', month: 'เมษายน 2569', policyName: 'AIA Health Happy', date: '17 เม.ย.', method: 'PromptPay', amount: 4250, type: 'bill' },
+  ];
+}
 
 
 export function HistoryScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const insets = useSafeAreaInsets();
   const s = useStrings();
+  const language = useAppStore((state) => state.language);
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+
+  const PAYMENTS = getPayments(language);
 
   const FILTER_LABELS: { key: FilterType; label: string }[] = [
     { key: 'all', label: s.history.filterAll },

@@ -18,14 +18,17 @@ import { useAppStore } from '../../store';
 
 type Nav = NativeStackNavigationProp<any>;
 
-const PAYMENT_HISTORY = [
-  { label: 'ม.ค.', value: 4250, color: colors.primaryTintDark },
-  { label: 'ก.พ.', value: 4250, color: colors.primaryTintDark },
-  { label: 'มี.ค.', value: 4250, color: colors.primaryTintDark },
-  { label: 'เม.ย.', value: 4250, color: colors.primaryTintDark },
-  { label: 'พ.ค.', value: 4250, color: colors.primaryTintDark },
-  { label: 'มิ.ย.', value: 4250, color: colors.primary, isLast: true },
-];
+function getPaymentHistory(language: string) {
+  const labels = language === 'en'
+    ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+    : ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'];
+  return labels.map((label, i) => ({
+    label,
+    value: 4250,
+    color: i === labels.length - 1 ? colors.primary : colors.primaryTintDark,
+    isLast: i === labels.length - 1,
+  }));
+}
 
 interface ChatBubble {
   from: 'ai' | 'user';
@@ -113,9 +116,11 @@ export function CelebrationDetailScreen() {
                 Milestone Reached
               </Text>
             </View>
-            <Text style={{ fontFamily: fontFamily.jakarta.extraBold, fontSize: 42, color: '#fff', letterSpacing: -1 }}>12 งวด</Text>
+            <Text style={{ fontFamily: fontFamily.jakarta.extraBold, fontSize: 42, color: '#fff', letterSpacing: -1 }}>
+              {language === 'en' ? '12 payments' : '12 งวด'}
+            </Text>
             <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: 14, color: 'rgba(255,255,255,0.8)', textAlign: 'center' }}>
-              ชำระตรงเวลาต่อเนื่อง · ไม่มีค่าปรับสักครั้ง
+              {language === 'en' ? 'Consistently on time · Never a late fee' : 'ชำระตรงเวลาต่อเนื่อง · ไม่มีค่าปรับสักครั้ง'}
             </Text>
 
             <View style={{ flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.10)', borderRadius: 14, width: '100%' }}>
@@ -151,7 +156,7 @@ export function CelebrationDetailScreen() {
               <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 11, color: colors.success }}>{language === 'en' ? 'On time every instalment' : 'ตรงเวลาทุกงวด'}</Text>
             </View>
           </View>
-          <BarChart data={PAYMENT_HISTORY} height={80} formatValue={(v) => `฿${(v / 1000).toFixed(1)}k`} labelColor={colors.primary} />
+          <BarChart data={getPaymentHistory(language)} height={80} formatValue={(v) => `฿${(v / 1000).toFixed(1)}k`} labelColor={colors.primary} />
         </View>
 
         {/* Protection value */}

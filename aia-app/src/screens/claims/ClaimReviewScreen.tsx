@@ -45,7 +45,7 @@ export function ClaimReviewScreen() {
     { label: language === 'en' ? 'Claim Type' : 'ประเภทการเคลม', value: s.claims.claimCategoryMedical },
     { label: s.claims.treatmentTypeLabel, value: s.claims.treatmentOPD },
     { label: s.claims.illnessCauseLabel, value: language === 'en' ? 'Flu' : 'ไข้หวัด' },
-    { label: s.claims.treatmentDate, value: '7 พ.ค. 2566' },
+    { label: s.claims.treatmentDate, value: language === 'en' ? '7 May 2023' : '7 พ.ค. 2566' },
     { label: s.claims.hospitalNameLabel, value: language === 'en' ? 'Bangkok Christian Hospital' : 'รพ.กรุงเทพคริสเตียน' },
   ];
 

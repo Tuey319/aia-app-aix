@@ -74,7 +74,7 @@ export function ClaimHistoryScreen() {
   const language = useAppStore((state) => state.language);
 
   const STEPS: TimelineStep[] = [
-    { label: s.claims.statusReceived, sub: '18 มิ.ย. 2569 · CH-41ย.', status: 'done' },
+    { label: s.claims.statusReceived, sub: language === 'en' ? '18 Jun 2026 · CH-41Y.' : '18 มิ.ย. 2569 · CH-41ย.', status: 'done' },
     { label: s.claims.statusReview, sub: s.claims.statusReviewSub, status: 'active' },
     { label: s.claims.statusPaid, sub: language === 'en' ? 'Pending' : 'รอดำเนินการ', status: 'pending' },
   ];
@@ -275,7 +275,7 @@ export function ClaimHistoryScreen() {
 
         {/* Back to home link */}
         <TouchableOpacity
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('HomeTab' as any)}
           style={{ alignItems: 'center', paddingVertical: 8 }}
         >
           <Text

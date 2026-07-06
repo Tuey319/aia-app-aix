@@ -325,7 +325,7 @@ export function HomeScreen() {
                 >
                   {s.home.amountDue}
                 </Text>
-                <StatusPill label={`ครบกำหนด ${policy.dueDate}`} variant="amber" />
+                <StatusPill label={language === 'en' ? `Due ${policy.dueDateEn}` : `ครบกำหนด ${policy.dueDate}`} variant="amber" />
               </View>
               <Text
                 style={{
@@ -459,7 +459,7 @@ export function HomeScreen() {
                   {s.home.promoCardSub}
                 </Text>
                 <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 10, color: colors.primary, opacity: 0.75, marginTop: 4 }}>
-                  {s.home.promoExpiry('31 ธ.ค. 2567')}
+                  {s.home.promoExpiry(language === 'en' ? '31 Dec 2024' : '31 ธ.ค. 2567')}
                 </Text>
               </View>
             ))}

@@ -81,7 +81,7 @@ export function ClaimStartScreen() {
           </Text>
           <ReviewRow label={s.claims.claimNoLabel} value="TXXXXXXXX" mono />
           <ReviewRow label={s.claims.beneficiary} value={language === 'en' ? 'Somxxxx Namxxxxxxx' : 'มาxxxxxx นาคxxxxxx'} />
-          <ReviewRow label={s.claims.treatmentDate} value="7 พ.ค. 2566" />
+          <ReviewRow label={s.claims.treatmentDate} value={language === 'en' ? '7 May 2023' : '7 พ.ค. 2566'} />
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: fontSize.caption, color: colors.textSecondary }}>
               {language === 'en' ? 'Status' : 'สถานะ'}
@@ -94,7 +94,7 @@ export function ClaimStartScreen() {
             </View>
           </View>
           <View style={{ height: 1, backgroundColor: colors.hairline2, marginVertical: 2 }} />
-          <ReviewRow label={s.claims.totalClaimed} value="1,256.00 บาท" bold />
+          <ReviewRow label={s.claims.totalClaimed} value={language === 'en' ? '฿1,256.00' : '1,256.00 บาท'} bold />
 
           {/* Notice banner */}
           <View

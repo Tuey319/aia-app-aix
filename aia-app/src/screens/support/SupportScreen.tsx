@@ -16,6 +16,7 @@ import { cardShadow } from '../../tokens/shadows';
 import { SectionGroup } from '../../components/SectionGroup';
 import { ListRow } from '../../components/ListRow';
 import { useStrings } from '../../i18n';
+import { useAppStore } from '../../store';
 
 type Nav = NativeStackNavigationProp<any>;
 
@@ -23,6 +24,7 @@ export function SupportScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
   const s = useStrings();
+  const language = useAppStore((state) => state.language);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
@@ -93,7 +95,7 @@ export function SupportScreen() {
           <ListRow
             icon="event-repeat"
             title={s.support.changeFreq}
-            subtitle="รายเดือน · ราย 3 เดือน / รายปี"
+            subtitle={language === 'en' ? 'Monthly · Quarterly / Annual' : 'รายเดือน · ราย 3 เดือน / รายปี'}
             onPress={() => navigation.navigate('ChangeFreq')}
           />
           <ListRow
@@ -104,7 +106,7 @@ export function SupportScreen() {
           <ListRow
             icon="description"
             title={s.support.requestDocs}
-            onPress={() => navigation.navigate('PolicyDocs')}
+            onPress={() => navigation.navigate('PolicyTab' as any, { screen: 'PolicyDocs' } as any)}
           />
         </SectionGroup>
 

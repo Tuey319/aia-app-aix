@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, fontFamily, fontSize, radius, screenPadding, cardShadow } from '../../tokens';
 import { SpinnerArc } from '../../components/SpinnerArc';
 import { useStrings } from '../../i18n';
+import { useAppStore } from '../../store';
 
 type Nav = NativeStackNavigationProp<any>;
 
@@ -14,20 +15,26 @@ const POLICIES = [
   {
     id: '1',
     icon: 'umbrella-outline' as const,
-    name: 'เอไอเอ ตลอดชีพ ชำระเบี้ยประกันภัย 20 ปี (ไม่มีเงินปันผล)',
+    nameTh: 'เอไอเอ ตลอดชีพ ชำระเบี้ยประกันภัย 20 ปี (ไม่มีเงินปันผล)',
+    nameEn: 'AIA Whole Life 20-Year Payment (No Dividend)',
     policyNo: 'TXXXXXXXXXX',
     sumAssured: '3,100,200.00',
-    date: '1 ต.ค. 2565',
-    insured: 'นิตย์xxxx รัตนxxxxxxx',
+    dateTh: '1 ต.ค. 2565',
+    dateEn: '1 Oct 2022',
+    insuredTh: 'นิตย์xxxx รัตนxxxxxxx',
+    insuredEn: 'Nit xxxx Ratxxxxxxx',
   },
   {
     id: '2',
     icon: 'chart-line' as const,
-    name: 'เอไอเอ อิสระ พลัส (ยูนิต ลิงค์)',
+    nameTh: 'เอไอเอ อิสระ พลัส (ยูนิต ลิงค์)',
+    nameEn: 'AIA Issara Plus (Unit Linked)',
     policyNo: 'UXXXXXXXXXX',
     sumAssured: '3,100,200.00',
-    date: '1 ต.ค. 2565',
-    insured: 'นิตย์xxxx รัตนxxxxxxx',
+    dateTh: '1 ต.ค. 2565',
+    dateEn: '1 Oct 2022',
+    insuredTh: 'นิตย์xxxx รัตนxxxxxxx',
+    insuredEn: 'Nit xxxx Ratxxxxxxx',
   },
 ];
 
@@ -35,6 +42,7 @@ export function AllPoliciesScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
   const s = useStrings();
+  const language = useAppStore((state) => state.language);
   const [tab, setTab] = useState<'active' | 'expired'>('active');
   const [loading, setLoading] = useState(true);
 
@@ -103,14 +111,14 @@ export function AllPoliciesScreen() {
                     {s.policy.coverageSection}
                   </Text>
                   <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 13, color: colors.ink, lineHeight: 18 }}>
-                    {p.name}
+                    {language === 'en' ? p.nameEn : p.nameTh}
                   </Text>
                 </View>
               </View>
               <View style={{ height: 1, backgroundColor: colors.hairline2, marginVertical: 2 }} />
               <InfoRow label={s.policy.policyNoLabel} value={p.policyNo} mono />
-              <InfoRow label={s.policy.sumAssuredLabel} value={`${p.sumAssured} บาท`} />
-              <InfoRow label={s.policy.policyDateLabel} value={p.date} />
+              <InfoRow label={s.policy.sumAssuredLabel} value={language === 'en' ? `฿${p.sumAssured}` : `${p.sumAssured} บาท`} />
+              <InfoRow label={s.policy.policyDateLabel} value={language === 'en' ? p.dateEn : p.dateTh} />
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: fontSize.caption, color: colors.textSecondary }}>
                   {s.policy.statusLabel}
@@ -122,7 +130,7 @@ export function AllPoliciesScreen() {
                   </Text>
                 </View>
               </View>
-              <InfoRow label={s.policy.insuredPerson} value={p.insured} />
+              <InfoRow label={s.policy.insuredPerson} value={language === 'en' ? p.insuredEn : p.insuredTh} />
             </TouchableOpacity>
           ))
         ) : (

@@ -212,7 +212,7 @@ export function ValueScreen() {
                 color: colors.success,
               }}
             >
-              มูลค่าเงินสดสะสม
+              {language === 'en' ? 'Accumulated Cash Value' : 'มูลค่าเงินสดสะสม'}
             </Text>
             <Text
               style={{

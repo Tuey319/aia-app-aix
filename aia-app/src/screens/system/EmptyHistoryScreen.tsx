@@ -38,7 +38,7 @@ export function EmptyHistoryScreen() {
       </View>
 
       <View style={{ paddingHorizontal: screenPadding, paddingBottom: insets.bottom + 16, paddingTop: 12, backgroundColor: colors.screenBg, borderTopWidth: 1, borderTopColor: colors.hairline2 }}>
-        <TouchableOpacity onPress={() => navigation.navigate('PaySelect')} activeOpacity={0.82}
+        <TouchableOpacity onPress={() => navigation.navigate('HomeTab' as any, { screen: 'PaySelect' } as any)} activeOpacity={0.82}
           style={{ backgroundColor: colors.primary, borderRadius: radius.button, height: 52, alignItems: 'center', justifyContent: 'center', ...primaryButtonShadow }}>
           <Text style={{ color: colors.white, fontFamily: fontFamily.anuphan.bold, fontSize: fontSize.title }}>{s.system.emptyHistoryBtn}</Text>
         </TouchableOpacity>

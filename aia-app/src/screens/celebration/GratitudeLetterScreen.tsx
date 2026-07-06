@@ -93,7 +93,9 @@ export function GratitudeLetterScreen() {
             </LinearGradient>
 
             <View style={{ padding: 24, gap: 16 }}>
-              <Text style={{ fontFamily: fontFamily.mono.regular, fontSize: 10, color: colors.textTertiary, letterSpacing: 0.8 }}>17 มิถุนายน 2569</Text>
+              <Text style={{ fontFamily: fontFamily.mono.regular, fontSize: 10, color: colors.textTertiary, letterSpacing: 0.8 }}>
+                {language === 'en' ? '17 June 2026' : '17 มิถุนายน 2569'}
+              </Text>
 
               <View style={{ height: 1, backgroundColor: '#FFE4CC' }} />
 

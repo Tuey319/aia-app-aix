@@ -51,12 +51,8 @@ try { PayFailedScreen = require('../screens/payment/PayFailedScreen').PayFailedS
 
 // Agent-built assistant screens
 let AssistantScreen: React.ComponentType<any>;
-let AssistantTypingScreen: React.ComponentType<any>;
-let AssistantActionScreen: React.ComponentType<any>;
 
 try { AssistantScreen = require('../screens/assistant/AssistantScreen').AssistantScreen; } catch { AssistantScreen = () => <PlaceholderScreen name="ผู้ช่วย AIA" />; }
-try { AssistantTypingScreen = require('../screens/assistant/AssistantTypingScreen').AssistantTypingScreen; } catch { AssistantTypingScreen = () => <PlaceholderScreen name="กำลังพิมพ์" />; }
-try { AssistantActionScreen = require('../screens/assistant/AssistantActionScreen').AssistantActionScreen; } catch { AssistantActionScreen = () => <PlaceholderScreen name="ผู้ช่วย AIA" />; }
 
 // System screens
 let GenericErrorScreen: React.ComponentType<any>;
@@ -96,8 +92,6 @@ export function HomeStack() {
       <Stack.Screen name="PayFailed" component={PayFailedScreen} />
       {/* AI Assistant */}
       <Stack.Screen name="Assistant" component={AssistantScreen} />
-      <Stack.Screen name="AssistantTyping" component={AssistantTypingScreen} />
-      <Stack.Screen name="AssistantAction" component={AssistantActionScreen} />
       {/* System */}
       <Stack.Screen name="GenericError" component={GenericErrorScreen} />
       <Stack.Screen name="Offline" component={OfflineScreen} />

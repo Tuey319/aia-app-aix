@@ -119,7 +119,7 @@ export function AffordabilityScreen() {
           {/* Legend dots */}
           <View style={{ flexDirection: 'row', gap: 16 }}>
             <ZoneLegend color={colors.success} label={`${language === 'en' ? 'Current' : 'คงอยู่'} ${currentPct}%`} />
-            <ZoneLegend color={colors.amber} label="ช่วง 7.4 - 15.2%" />
+            <ZoneLegend color={colors.amber} label={language === 'en' ? 'Range 7.4 - 15.2%' : 'ช่วง 7.4 - 15.2%'} />
           </View>
         </View>
 

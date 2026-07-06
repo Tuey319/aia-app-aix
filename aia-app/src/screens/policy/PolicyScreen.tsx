@@ -195,6 +195,43 @@ export function PolicyScreen() {
           ))}
         </View>
 
+        {/* ── Premium management card ───────────────────────────── */}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('HomeTab' as any, { screen: 'PremiumMgmt' } as any)}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: colors.card,
+            borderRadius: radius.cardLg,
+            padding: 16,
+            gap: 12,
+            ...cardShadow,
+          }}
+        >
+          <View
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: 13,
+              backgroundColor: colors.primaryTint,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <MaterialIcons name="account-balance-wallet" size={22} color={colors.primary} />
+          </View>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 14, color: colors.ink }}>
+              {s.premiumMgmt.title}
+            </Text>
+            <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 11, color: colors.textSecondary }}>
+              {s.policy.premiumMgmtCardSub}
+            </Text>
+          </View>
+          <MaterialIcons name="chevron-right" size={20} color={colors.textTertiary} />
+        </TouchableOpacity>
+
         {/* ── Coverage overview list ────────────────────────────── */}
         <View>
           <Text

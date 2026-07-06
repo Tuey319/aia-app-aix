@@ -68,7 +68,7 @@ export function PolicyDetailScreen() {
           <DetailRow label={s.policy.insuredPerson} value={language === 'en' ? 'Nit xxxx Ratxxxxxxx' : 'นิตย์xxxx รัตนxxxxxxx'} />
           <DetailRow label={s.policy.policyOwnerLabel} value={language === 'en' ? 'Som xxxx Ratxxxxxxx' : 'สมxxxx รัตนxxxxxxx'} />
           <DetailRow label={s.policy.policyNoLabel} value={policy.policyNo} mono />
-          <DetailRow label={s.policy.sumAssuredLabel} value="3,100,200.00 บาท" />
+          <DetailRow label={s.policy.sumAssuredLabel} value={language === 'en' ? '฿3,100,200.00' : '3,100,200.00 บาท'} />
 
           <TouchableOpacity
             activeOpacity={0.75}

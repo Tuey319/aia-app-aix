@@ -14,6 +14,7 @@ interface AppState {
     annualPremium: number;
     monthlyPremium: number;
     dueDate: string;
+    dueDateEn: string;
     policyNo: string;
   };
   income: number;
@@ -40,6 +41,7 @@ export const useAppStore = create<AppState>((set) => ({
     annualPremium: 51000,
     monthlyPremium: 4250,
     dueDate: '25 มิ.ย.',
+    dueDateEn: '25 Jun',
     policyNo: '12-3456789',
   },
 

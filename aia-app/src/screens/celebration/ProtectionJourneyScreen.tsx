@@ -17,28 +17,45 @@ import { IllustrationHealthInsurance } from '../../components/illustrations';
 
 type Nav = NativeStackNavigationProp<any>;
 
-const MONTHLY_DATA = [
-  { label: 'ม.ค.', value: 4250, color: colors.primaryTintDark },
-  { label: 'ก.พ.', value: 4250, color: colors.primaryTintDark },
-  { label: 'มี.ค.', value: 4250, color: colors.primaryTintDark },
-  { label: 'เม.ย.', value: 4250, color: colors.primaryTintDark },
-  { label: 'พ.ค.', value: 4250, color: colors.primaryTintDark },
-  { label: 'มิ.ย.', value: 4250, color: colors.primary, isLast: true },
-];
+function getMonthlyData(language: string) {
+  const labels = language === 'en'
+    ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+    : ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'];
+  return labels.map((label, i) => ({
+    label,
+    value: 4250,
+    color: i === labels.length - 1 ? colors.primary : colors.primaryTintDark,
+    isLast: i === labels.length - 1,
+  }));
+}
 
-const PROTECTION_EVENTS = [
-  { month: 'มกราคม', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา', sub: '17 ม.ค. 2569 · ฿4,250', status: 'done' as const },
-  { month: 'กุมภาพันธ์', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา', sub: '17 ก.พ. 2569 · ฿4,250', status: 'done' as const },
-  { month: 'มีนาคม', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา + รับ Badge 🏅', sub: '17 มี.ค. 2569 · ฿4,250 · Consistent Payer unlocked', status: 'done' as const },
-  { month: 'เมษายน', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา', sub: '17 เม.ย. 2569 · ฿4,250', status: 'done' as const },
-  { month: 'พฤษภาคม', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา', sub: '17 พ.ค. 2569 · ฿4,250', status: 'done' as const },
-  { month: 'มิถุนายน', icon: 'emoji-events' as const, iconColor: colors.gold, title: 'Milestone 12 งวด! 🎉', sub: '17 มิ.ย. 2569 · ฿4,250 · Always On Time unlocked', status: 'done' as const },
-];
+function getProtectionEvents(language: string) {
+  const onTime = language === 'en' ? 'Paid on time' : 'ชำระตรงเวลา';
+  if (language === 'en') {
+    return [
+      { month: 'January', icon: 'check-circle' as const, iconColor: colors.success, title: onTime, sub: '17 Jan 2026 · ฿4,250', status: 'done' as const },
+      { month: 'February', icon: 'check-circle' as const, iconColor: colors.success, title: onTime, sub: '17 Feb 2026 · ฿4,250', status: 'done' as const },
+      { month: 'March', icon: 'check-circle' as const, iconColor: colors.success, title: 'Paid on time + earned a badge 🏅', sub: '17 Mar 2026 · ฿4,250 · Consistent Payer unlocked', status: 'done' as const },
+      { month: 'April', icon: 'check-circle' as const, iconColor: colors.success, title: onTime, sub: '17 Apr 2026 · ฿4,250', status: 'done' as const },
+      { month: 'May', icon: 'check-circle' as const, iconColor: colors.success, title: onTime, sub: '17 May 2026 · ฿4,250', status: 'done' as const },
+      { month: 'June', icon: 'emoji-events' as const, iconColor: colors.gold, title: 'Milestone: 12 payments! 🎉', sub: '17 Jun 2026 · ฿4,250 · Always On Time unlocked', status: 'done' as const },
+    ];
+  }
+  return [
+    { month: 'มกราคม', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา', sub: '17 ม.ค. 2569 · ฿4,250', status: 'done' as const },
+    { month: 'กุมภาพันธ์', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา', sub: '17 ก.พ. 2569 · ฿4,250', status: 'done' as const },
+    { month: 'มีนาคม', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา + รับ Badge 🏅', sub: '17 มี.ค. 2569 · ฿4,250 · Consistent Payer unlocked', status: 'done' as const },
+    { month: 'เมษายน', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา', sub: '17 เม.ย. 2569 · ฿4,250', status: 'done' as const },
+    { month: 'พฤษภาคม', icon: 'check-circle' as const, iconColor: colors.success, title: 'ชำระตรงเวลา', sub: '17 พ.ค. 2569 · ฿4,250', status: 'done' as const },
+    { month: 'มิถุนายน', icon: 'emoji-events' as const, iconColor: colors.gold, title: 'Milestone 12 งวด! 🎉', sub: '17 มิ.ย. 2569 · ฿4,250 · Always On Time unlocked', status: 'done' as const },
+  ];
+}
 
 export function ProtectionJourneyScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
   const language = useAppStore((state) => state.language);
+  const protectionEvents = getProtectionEvents(language);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
@@ -68,7 +85,7 @@ export function ProtectionJourneyScreen() {
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <MaterialIcons name="favorite" size={16} color="rgba(255,255,255,0.7)" />
             <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>
-              AIA Health Happy · ปี 2569
+              AIA Health Happy · {language === 'en' ? 'Year 2026' : 'ปี 2569'}
             </Text>
           </View>
 
@@ -96,10 +113,10 @@ export function ProtectionJourneyScreen() {
         <View style={{ backgroundColor: colors.card, borderRadius: radius.card, padding: 18, gap: 14, ...cardShadow }}>
           <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
             <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 14, color: colors.ink2 }}>{language === 'en' ? 'Monthly Payment History' : 'ประวัติการชำระรายเดือน'}</Text>
-            <Text style={{ fontFamily: fontFamily.mono.regular, fontSize: 9, color: colors.textSecondary, letterSpacing: 0.8, textTransform: 'uppercase' }}>2569</Text>
+            <Text style={{ fontFamily: fontFamily.mono.regular, fontSize: 9, color: colors.textSecondary, letterSpacing: 0.8, textTransform: 'uppercase' }}>{language === 'en' ? '2026' : '2569'}</Text>
           </View>
           <BarChart
-            data={MONTHLY_DATA}
+            data={getMonthlyData(language)}
             height={80}
             formatValue={(v) => `฿${(v / 1000).toFixed(1)}k`}
             labelColor={colors.primary}
@@ -118,22 +135,22 @@ export function ProtectionJourneyScreen() {
             {language === 'en' ? 'Protection Timeline' : 'Timeline การคุ้มครอง'}
           </Text>
 
-          {PROTECTION_EVENTS.map((evt, i) => (
+          {protectionEvents.map((evt, i) => (
             <View key={i} style={{ flexDirection: 'row', gap: 14 }}>
               {/* Dot + line */}
               <View style={{ alignItems: 'center', width: 22 }}>
                 <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: evt.iconColor + '20', alignItems: 'center', justifyContent: 'center' }}>
                   <MaterialIcons name={evt.icon} size={14} color={evt.iconColor} />
                 </View>
-                {i < PROTECTION_EVENTS.length - 1 && (
+                {i < protectionEvents.length - 1 && (
                   <View style={{ width: 2, flex: 1, minHeight: 24, backgroundColor: colors.hairline, marginVertical: 3 }} />
                 )}
               </View>
 
               {/* Content */}
-              <View style={{ flex: 1, paddingBottom: i < PROTECTION_EVENTS.length - 1 ? 16 : 0 }}>
+              <View style={{ flex: 1, paddingBottom: i < protectionEvents.length - 1 ? 16 : 0 }}>
                 <Text style={{ fontFamily: fontFamily.mono.regular, fontSize: 9, color: colors.textTertiary, letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 2 }}>
-                  {evt.month} 2569
+                  {evt.month} {language === 'en' ? '2026' : '2569'}
                 </Text>
                 <Text style={{ fontFamily: fontFamily.anuphan.semiBold, fontSize: 13, color: colors.ink2 }}>{evt.title}</Text>
                 <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 11, color: colors.textSecondary, lineHeight: 16 }}>{evt.sub}</Text>

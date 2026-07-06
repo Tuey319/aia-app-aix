@@ -9,12 +9,14 @@ import { colors, fontFamily, fontSize, radius, screenPadding, cardGap } from '..
 import { cardShadow, primaryButtonShadow } from '../../tokens/shadows';
 import { CoverageRing } from '../../components/CoverageRing';
 import { COVERAGE_CATEGORIES } from './coverageCategories';
+import { useAppStore } from '../../store';
 
 type Nav = NativeStackNavigationProp<HomeStackParamList, 'CoverageOverview'>;
 
 export function CoverageOverviewScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
+  const language = useAppStore((state) => state.language);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
@@ -33,7 +35,7 @@ export function CoverageOverviewScreen() {
           <MaterialIcons name="arrow-back-ios" size={20} color={colors.ink} />
         </TouchableOpacity>
         <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: fontSize.titleLg, color: colors.ink }}>
-          ภาพรวมความคุ้มครองของคุณ
+          {language === 'en' ? 'Your Coverage Overview' : 'ภาพรวมความคุ้มครองของคุณ'}
         </Text>
       </View>
 
@@ -48,7 +50,7 @@ export function CoverageOverviewScreen() {
         {/* Intro */}
         <View style={{ gap: 6, marginBottom: 4 }}>
           <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: fontSize.title, color: colors.ink2 }}>
-            ความคุ้มครองของคุณเพียงพอหรือไม่
+            {language === 'en' ? 'Is your coverage enough?' : 'ความคุ้มครองของคุณเพียงพอหรือไม่'}
           </Text>
           <Text
             style={{
@@ -58,8 +60,9 @@ export function CoverageOverviewScreen() {
               lineHeight: 18,
             }}
           >
-            ด้านล่างคือสรุปภาพรวมความคุ้มครอง 6 ประเภท โดยอิงจากจำนวนเงินเอาประกันภัยทั้งหมดของคุณ
-            ซึ่งการให้ข้อมูลครบ จะทำให้การคำนวณแม่นยิ่งขึ้น
+            {language === 'en'
+              ? 'Below is a summary of your coverage across 6 categories, based on your total sum insured. Complete information leads to a more accurate calculation.'
+              : 'ด้านล่างคือสรุปภาพรวมความคุ้มครอง 6 ประเภท โดยอิงจากจำนวนเงินเอาประกันภัยทั้งหมดของคุณ ซึ่งการให้ข้อมูลครบ จะทำให้การคำนวณแม่นยิ่งขึ้น'}
           </Text>
         </View>
 
@@ -85,11 +88,11 @@ export function CoverageOverviewScreen() {
                   <MaterialCommunityIcons name={cat.icon} size={18} color={colors.primary} />
                   <View>
                     <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: fontSize.caption, color: colors.ink2 }}>
-                      {cat.label}
+                      {language === 'en' ? cat.labelEn : cat.label}
                     </Text>
                     {cat.sublabel && (
                       <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: fontSize.xs, color: colors.textSecondary }}>
-                        {cat.sublabel}
+                        {language === 'en' ? cat.sublabelEn : cat.sublabel}
                       </Text>
                     )}
                   </View>
@@ -103,7 +106,7 @@ export function CoverageOverviewScreen() {
                   {cat.amount.toLocaleString('en-US')}
                   {cat.unit === 'daily' && (
                     <Text style={{ fontFamily: fontFamily.jakarta.medium, fontSize: fontSize.sm, color: colors.textSecondary }}>
-                      /วัน
+                      /{language === 'en' ? 'day' : 'วัน'}
                     </Text>
                   )}
                 </Text>
@@ -126,7 +129,7 @@ export function CoverageOverviewScreen() {
           }}
         >
           <Text style={{ color: colors.white, fontFamily: fontFamily.anuphan.bold, fontSize: 16 }}>
-            คำนวณอีกครั้ง
+            {language === 'en' ? 'Recalculate' : 'คำนวณอีกครั้ง'}
           </Text>
         </TouchableOpacity>
       </ScrollView>

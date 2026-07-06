@@ -48,8 +48,6 @@ export type HomeStackParamList = {
   PayFailed: undefined;
   // AI Assistant
   Assistant: undefined;
-  AssistantTyping: undefined;
-  AssistantAction: undefined;
   // System
   GenericError: undefined;
   Offline: undefined;

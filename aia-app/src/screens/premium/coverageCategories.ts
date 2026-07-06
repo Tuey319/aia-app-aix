@@ -6,7 +6,9 @@ export interface CoverageCategory {
   id: CoverageCategoryId;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   label: string;
+  labelEn: string;
   sublabel?: string;
+  sublabelEn?: string;
   pct: number; // current adequacy %, 0–100
   amount: number; // current sum assured / daily limit
   unit: 'lump' | 'daily';
@@ -21,6 +23,7 @@ export const COVERAGE_CATEGORIES: CoverageCategory[] = [
     id: 'life',
     icon: 'umbrella-outline',
     label: 'ชีวิต',
+    labelEn: 'Life',
     pct: 12,
     amount: 2700000,
     unit: 'lump',
@@ -33,7 +36,9 @@ export const COVERAGE_CATEGORIES: CoverageCategory[] = [
     id: 'ciEarly',
     icon: 'medical-bag',
     label: 'ระดับต้น-กลาง',
+    labelEn: 'Early-Mid Stage',
     sublabel: 'โรคร้ายแรง',
+    sublabelEn: 'Critical Illness',
     pct: 58,
     amount: 700000,
     unit: 'lump',
@@ -46,7 +51,9 @@ export const COVERAGE_CATEGORIES: CoverageCategory[] = [
     id: 'ciSevere',
     icon: 'lungs',
     label: 'ระดับรุนแรง',
+    labelEn: 'Severe Stage',
     sublabel: 'โรคร้ายแรง',
+    sublabelEn: 'Critical Illness',
     pct: 100,
     amount: 4000000,
     unit: 'lump',
@@ -59,6 +66,7 @@ export const COVERAGE_CATEGORIES: CoverageCategory[] = [
     id: 'accident',
     icon: 'bandage',
     label: 'อุบัติเหตุ',
+    labelEn: 'Accident',
     pct: 2,
     amount: 500000,
     unit: 'lump',
@@ -71,7 +79,9 @@ export const COVERAGE_CATEGORIES: CoverageCategory[] = [
     id: 'hospital',
     icon: 'hospital-building',
     label: 'ค่ารักษาพยาบาล',
+    labelEn: 'Hospital Care',
     sublabel: 'ค่าห้อง',
+    sublabelEn: 'Room & Board',
     pct: 100,
     amount: 4500,
     unit: 'daily',
@@ -84,7 +94,9 @@ export const COVERAGE_CATEGORIES: CoverageCategory[] = [
     id: 'dailyComp',
     icon: 'cash-multiple',
     label: 'ค่าชดเชย',
+    labelEn: 'Compensation',
     sublabel: 'รายวัน',
+    sublabelEn: 'Daily',
     pct: 10,
     amount: 1000,
     unit: 'daily',

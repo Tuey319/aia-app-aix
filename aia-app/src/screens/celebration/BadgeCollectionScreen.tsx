@@ -20,11 +20,13 @@ interface Badge {
   name: string;
   nameTh: string;
   desc: string;
+  descEn: string;
   icon: keyof typeof MaterialIcons.glyphMap;
   color: string;
   bg: string;
   earned: boolean;
   earnedDate?: string;
+  earnedDateEn?: string;
   tier: 'bronze' | 'silver' | 'gold';
 }
 
@@ -34,11 +36,13 @@ const BADGES: Badge[] = [
     name: 'Always On Time',
     nameTh: 'ชำระตรงเวลา',
     desc: 'ชำระเบี้ยตรงเวลาต่อเนื่อง 12 งวด',
+    descEn: 'Paid premium on time for 12 consecutive periods',
     icon: 'schedule',
     color: colors.success,
     bg: colors.successTint,
     earned: true,
     earnedDate: '17 มิ.ย. 2569',
+    earnedDateEn: '17 Jun 2026',
     tier: 'gold',
   },
   {
@@ -46,11 +50,13 @@ const BADGES: Badge[] = [
     name: 'Consistent Payer',
     nameTh: 'ชำระต่อเนื่อง',
     desc: 'ไม่ขาดชำระติดต่อกัน 12 เดือน',
+    descEn: 'No missed payments for 12 consecutive months',
     icon: 'verified',
     color: colors.info,
     bg: colors.infoTint,
     earned: true,
     earnedDate: 'ม.ค. 2569',
+    earnedDateEn: 'Jan 2026',
     tier: 'silver',
   },
   {
@@ -58,11 +64,13 @@ const BADGES: Badge[] = [
     name: 'Yearly Protector',
     nameTh: 'ปีถัดปี',
     desc: 'ต่ออายุกรมธรรม์ครบ 1 ปี',
+    descEn: 'Renewed policy for 1 full year',
     icon: 'shield',
     color: colors.primary,
     bg: colors.primaryTint,
     earned: true,
     earnedDate: 'ม.ค. 2569',
+    earnedDateEn: 'Jan 2026',
     tier: 'bronze',
   },
   {
@@ -70,6 +78,7 @@ const BADGES: Badge[] = [
     name: 'Loyal Member',
     nameTh: 'สมาชิกระยะยาว',
     desc: 'เป็นสมาชิก AIA ครบ 3 ปี',
+    descEn: 'AIA member for 3 full years',
     icon: 'workspace-premium',
     color: colors.gold,
     bg: colors.goldTint,
@@ -81,11 +90,13 @@ const BADGES: Badge[] = [
     name: 'Health Lover',
     nameTh: 'รักสุขภาพ',
     desc: 'สะสม Vitality แต้ม 10,000 คะแนน',
+    descEn: 'Earned 10,000 AIA Vitality points',
     icon: 'favorite',
     color: '#E91E8C',
     bg: '#FCEDF6',
     earned: true,
     earnedDate: 'มิ.ย. 2569',
+    earnedDateEn: 'Jun 2026',
     tier: 'silver',
   },
   {
@@ -93,6 +104,7 @@ const BADGES: Badge[] = [
     name: 'Goal Achiever',
     nameTh: 'บรรลุเป้าหมาย',
     desc: 'ออกกำลังกาย 150 วันในปีนี้',
+    descEn: 'Exercised 150 days this year',
     icon: 'sports-score',
     color: '#9B59B6',
     bg: '#F5EEF8',
@@ -104,6 +116,7 @@ const BADGES: Badge[] = [
     name: 'Smart Planner',
     nameTh: 'นักวางแผน',
     desc: 'เปลี่ยนเป็นชำระรายปีเพื่อประหยัด',
+    descEn: 'Switched to annual billing to save',
     icon: 'auto-awesome',
     color: colors.amber,
     bg: colors.amberTint,
@@ -115,6 +128,7 @@ const BADGES: Badge[] = [
     name: 'Top Spender',
     nameTh: 'ผู้ลงทุนชั้นนำ',
     desc: 'ชำระเบี้ยรวมเกิน ฿100,000',
+    descEn: 'Paid over ฿100,000 in total premiums',
     icon: 'diamond',
     color: '#1C4F9E',
     bg: '#EAF1FB',
@@ -126,7 +140,7 @@ const BADGES: Badge[] = [
 const TIER_LABEL = { bronze: 'Bronze', silver: 'Silver', gold: 'Gold' };
 const TIER_COLOR = { bronze: '#CD7F32', silver: '#9E9E9E', gold: colors.gold };
 
-function BadgeCard({ badge }: { badge: Badge }) {
+function BadgeCard({ badge, language }: { badge: Badge; language: string }) {
   const dim = (Dimensions.get('window').width - screenPadding * 2 - 12) / 2;
 
   return (
@@ -169,14 +183,14 @@ function BadgeCard({ badge }: { badge: Badge }) {
 
       <View style={{ alignItems: 'center', gap: 3 }}>
         <Text style={{ fontFamily: fontFamily.anuphan.bold, fontSize: 13, color: badge.earned ? colors.ink2 : colors.textTertiary, textAlign: 'center' }}>
-          {badge.nameTh}
+          {language === 'en' ? badge.name : badge.nameTh}
         </Text>
         <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 10, color: colors.textSecondary, textAlign: 'center', lineHeight: 14 }}>
-          {badge.desc}
+          {language === 'en' ? badge.descEn : badge.desc}
         </Text>
         {badge.earned && badge.earnedDate && (
           <Text style={{ fontFamily: fontFamily.mono.regular, fontSize: 9, color: badge.color, letterSpacing: 0.3, marginTop: 2 }}>
-            ✓ {badge.earnedDate}
+            ✓ {language === 'en' ? badge.earnedDateEn : badge.earnedDate}
           </Text>
         )}
       </View>
@@ -235,7 +249,7 @@ export function BadgeCollectionScreen() {
         {/* Badge grid */}
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
           {BADGES.map((badge) => (
-            <BadgeCard key={badge.id} badge={badge} />
+            <BadgeCard key={badge.id} badge={badge} language={language} />
           ))}
         </View>
 

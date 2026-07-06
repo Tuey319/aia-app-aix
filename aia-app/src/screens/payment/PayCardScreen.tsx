@@ -481,7 +481,10 @@ export function PayCardScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.82}
-            onPress={() => navigation.navigate('PayChecking')}
+            onPress={() => {
+              navigation.navigate('PayProcessing');
+              setTimeout(() => navigation.navigate('PayChecking'), 1800);
+            }}
             style={{
               flex: 2,
               height: 52,

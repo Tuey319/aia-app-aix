@@ -236,7 +236,14 @@ export function NotificationsScreen() {
 
   function handlePress(n: Notification) {
     markRead(n.id);
-    navigation.navigate(n.actionRoute as any);
+    // NotificationsScreen lives in HomeStack; 'Support' only exists in AccountStack,
+    // so it needs an explicit cross-tab hop -- every other actionRoute (PaySelect,
+    // PayChecking, PayMethod, Costs) already resolves within HomeStack itself.
+    if (n.actionRoute === 'Support') {
+      navigation.navigate('AccountTab' as any, { screen: 'Support' } as any);
+    } else {
+      navigation.navigate(n.actionRoute as any);
+    }
   }
 
   return (

@@ -38,7 +38,9 @@ interface LighterPlan {
   monthly: number;
   savings: number;
   keeps: string[];
+  keepsEn: string[];
   changes: string[];
+  changesEn: string[];
 }
 
 const LIGHTER_PLANS: LighterPlan[] = [
@@ -49,7 +51,9 @@ const LIGHTER_PLANS: LighterPlan[] = [
     monthly: 3200,
     savings: 1050,
     keeps: ['ความคุ้มครองชีวิต ฿1.5M', 'สิทธิ์รักษาพยาบาลใน รพ.', 'AIA Vitality'],
+    keepsEn: ['Life coverage ฿1.5M', 'Hospitalization benefits', 'AIA Vitality'],
     changes: ['ทุนประกันลด ฿500k', 'ผลประโยชน์การเสียชีวิตอุบัติเหตุ'],
+    changesEn: ['Sum insured reduced by ฿500k', 'Accidental death benefit removed'],
   },
   {
     id: 'b',
@@ -58,12 +62,14 @@ const LIGHTER_PLANS: LighterPlan[] = [
     monthly: 2100,
     savings: 2150,
     keeps: ['ความคุ้มครองชีวิต ฿1.0M', 'AIA Vitality'],
+    keepsEn: ['Life coverage ฿1.0M', 'AIA Vitality'],
     changes: ['ทุนประกันลด ฿1M', 'ผลประโยชน์ผู้ป่วยใน', 'มูลค่าเงินสดสะสม'],
+    changesEn: ['Sum insured reduced by ฿1M', 'Inpatient benefit removed', 'Cash value accumulation removed'],
   },
 ];
 
-function formatCoverage(amount: number, unit: 'lump' | 'daily') {
-  if (unit === 'daily') return `฿${amount.toLocaleString('en-US')}/วัน`;
+function formatCoverage(amount: number, unit: 'lump' | 'daily', language: string) {
+  if (unit === 'daily') return `฿${amount.toLocaleString('en-US')}/${language === 'en' ? 'day' : 'วัน'}`;
   return amount >= 1000000 ? `฿${(amount / 1000000).toFixed(1)}M` : `฿${amount.toLocaleString('en-US')}`;
 }
 
@@ -112,7 +118,7 @@ export function AdjustPlanScreen() {
           }}
         >
           {language === 'en'
-            ? (isLife ? 'Adjust Your Plan' : `Adjust Coverage · ${category.label}`)
+            ? (isLife ? 'Adjust Your Plan' : `Adjust Coverage · ${category.labelEn}`)
             : (isLife ? 'ปรับแผนให้พอดี' : `ปรับความคุ้มครอง · ${category.label}`)}
         </Text>
       </View>
@@ -225,7 +231,7 @@ export function AdjustPlanScreen() {
                   color: colors.white,
                 }}
               >
-                {formatCoverage(coverageLevel, category.unit)}
+                {formatCoverage(coverageLevel, category.unit, language)}
               </Text>
             </View>
             <View
@@ -286,7 +292,7 @@ export function AdjustPlanScreen() {
                 color: colors.primary,
               }}
             >
-              {formatCoverage(coverageLevel, category.unit)}
+              {formatCoverage(coverageLevel, category.unit, language)}
             </Text>
           </View>
 
@@ -307,13 +313,13 @@ export function AdjustPlanScreen() {
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={{ fontFamily: fontFamily.jakarta.medium, fontSize: 11, color: colors.textSecondary }}>
-              {formatCoverage(category.sliderMin, category.unit)}
+              {formatCoverage(category.sliderMin, category.unit, language)}
             </Text>
             <Text style={{ fontFamily: fontFamily.jakarta.medium, fontSize: 11, color: colors.textTertiary }}>
-              {formatCoverage(category.amount, category.unit)} ({language === 'en' ? 'current' : 'ปัจจุบัน'})
+              {formatCoverage(category.amount, category.unit, language)} ({language === 'en' ? 'current' : 'ปัจจุบัน'})
             </Text>
             <Text style={{ fontFamily: fontFamily.jakarta.medium, fontSize: 11, color: colors.textSecondary }}>
-              {formatCoverage(category.sliderMax, category.unit)}
+              {formatCoverage(category.sliderMax, category.unit, language)}
             </Text>
           </View>
 
@@ -457,7 +463,7 @@ export function AdjustPlanScreen() {
                     >
                       ✓ {s.adjustPlan.keeps}
                     </Text>
-                    {plan.keeps.map((k, i) => (
+                    {(language === 'en' ? plan.keepsEn : plan.keeps).map((k, i) => (
                       <Text
                         key={i}
                         style={{
@@ -483,7 +489,7 @@ export function AdjustPlanScreen() {
                     >
                       ↓ {s.adjustPlan.changes}
                     </Text>
-                    {plan.changes.map((c, i) => (
+                    {(language === 'en' ? plan.changesEn : plan.changes).map((c, i) => (
                       <Text
                         key={i}
                         style={{

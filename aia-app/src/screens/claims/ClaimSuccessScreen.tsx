@@ -232,7 +232,7 @@ export function ClaimSuccessScreen() {
       >
         <TouchableOpacity
           activeOpacity={0.85}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.popToTop()}
           style={{
             backgroundColor: colors.ink2,
             borderRadius: radius.button,

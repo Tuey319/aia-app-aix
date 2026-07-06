@@ -19,6 +19,7 @@ interface Benefit {
   titleTh: string;
   titleEn: string;
   discount: string;
+  discountEn?: string;
   tagTh?: string;
   tagEn?: string;
   monogram: string;
@@ -65,6 +66,7 @@ const BENEFITS: Benefit[] = [
     titleTh: 'ฟิตเนสไม่จำกัดครั้ง / เดือน',
     titleEn: 'Unlimited gym access / month',
     discount: '฿499/เดือน',
+    discountEn: '฿499/month',
     tagTh: 'ยอดนิยม',
     tagEn: 'Popular',
     monogram: 'VA',
@@ -105,6 +107,7 @@ const BENEFITS: Benefit[] = [
     titleTh: 'ส่วนลดพิซซ่า L ฟรีเครื่องดื่ม',
     titleEn: 'Large pizza + free drink',
     discount: '฿99 ลด',
+    discountEn: '฿99 off',
     monogram: 'PZ',
     logo: require('../../../assets/partners/pizza-company.webp'),
     iconBg: '#FFF3E4',
@@ -168,6 +171,7 @@ function BenefitCard({ benefit, language }: { benefit: Benefit; language: string
   const title = language === 'en' ? benefit.titleEn : benefit.titleTh;
   const tag = language === 'en' ? benefit.tagEn : benefit.tagTh;
   const expiry = language === 'en' ? benefit.expiryEn : benefit.expiryTh;
+  const discount = language === 'en' && benefit.discountEn ? benefit.discountEn : benefit.discount;
 
   return (
     <Pressable
@@ -222,7 +226,7 @@ function BenefitCard({ benefit, language }: { benefit: Benefit; language: string
         <View style={{ alignItems: 'flex-end', gap: 4 }}>
           <View style={{ backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 5, minWidth: 56, alignItems: 'center' }}>
             <Text style={{ fontFamily: fontFamily.jakarta.bold, fontSize: 11, color: colors.white, letterSpacing: 0.3 }}>
-              {benefit.discount}
+              {discount}
             </Text>
           </View>
         </View>

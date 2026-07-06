@@ -96,13 +96,6 @@ export function PayQrScreen() {
   const s = useStrings();
   const language = useAppStore((state) => state.language);
 
-  const infoRows = [
-    { label: 'บริษัท เอไอเอ จำกัด', value: '' },
-    { label: 'ผู้ชำระเงิน', value: 'Somchai Meethong' },
-    { label: 'เลขที่อ้างอิง (1/2)', value: '92XXXXXXXX' },
-    { label: 'เลขที่อ้างอิง (2/2)', value: '83XXXXX' },
-  ];
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.screenBg }} edges={['top']}>
       {/* Header */}

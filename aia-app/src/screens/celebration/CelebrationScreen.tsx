@@ -122,7 +122,9 @@ export function CelebrationScreen() {
               <View style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: radius.pill, paddingHorizontal: 14, paddingVertical: 5, marginTop: 6 }}>
                 <Text style={{ fontFamily: fontFamily.mono.semiBold, fontSize: 10, color: colors.white, letterSpacing: 1.5, textTransform: 'uppercase' }}>Milestone</Text>
               </View>
-              <Text style={{ fontFamily: fontFamily.jakarta.extraBold, fontSize: 44, color: colors.white, letterSpacing: -1 }}>12 งวด</Text>
+              <Text style={{ fontFamily: fontFamily.jakarta.extraBold, fontSize: 44, color: colors.white, letterSpacing: -1 }}>
+                {language === 'en' ? '12 payments' : '12 งวด'}
+              </Text>
               <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: 13, color: 'rgba(255,255,255,0.85)' }}>{language === 'en' ? 'On-time streak 🔥' : 'ชำระตรงเวลาต่อเนื่อง 🔥'}</Text>
             </LinearGradient>
 

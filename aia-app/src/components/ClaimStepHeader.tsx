@@ -39,7 +39,7 @@ export function ClaimStepHeader({ step, total = 3, title, subtitle }: ClaimStepH
           <MaterialIcons name="arrow-back-ios" size={20} color={colors.ink} />
         </TouchableOpacity>
         <Text style={{ flex: 1, fontFamily: fontFamily.anuphan.bold, fontSize: 17, color: colors.ink }}>{title}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} hitSlop={16}>
+        <TouchableOpacity onPress={() => navigation.popToTop()} hitSlop={16}>
           <MaterialIcons name="close" size={22} color={colors.ink} />
         </TouchableOpacity>
       </View>

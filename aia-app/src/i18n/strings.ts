@@ -308,6 +308,7 @@ export const strings = {
       criticalIllnessSevere: 'โรคร้ายแรงระดับรุนแรง',
       accident: 'อุบัติเหตุ',
       dailyCompensation: 'ค่าชดเชยรายวัน',
+      premiumMgmtCardSub: 'ชำระเบี้ยฯ · สุขภาพการเงิน · ประวัติการชำระ',
       // ── All policies / policy detail ──
       allPoliciesTitle: 'กรมธรรม์ทั้งหมด',
       insuredPerson: 'ผู้เอาประกันภัย',
@@ -849,6 +850,7 @@ export const strings = {
       criticalIllnessSevere: 'Severe Critical Illness',
       accident: 'Accident',
       dailyCompensation: 'Daily Compensation',
+      premiumMgmtCardSub: 'Pay premium · Financial health · Payment history',
       // ── All policies / policy detail ──
       allPoliciesTitle: 'All Policies',
       insuredPerson: 'Insured Person',

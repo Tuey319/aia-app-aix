@@ -65,7 +65,7 @@ export function PremiumMgmtScreen() {
         <View style={{ backgroundColor: colors.card, borderRadius: radius.cardLg, padding: 18, gap: 12, ...cardShadow }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <Text style={{ fontFamily: fontFamily.anuphan.medium, fontSize: 13, color: colors.textSecondary }}>{s.premiumMgmt.nextDue}</Text>
-            <StatusPill label={`${s.premiumMgmt.dueLabel} ${policy.dueDate}`} variant="amber" />
+            <StatusPill label={`${s.premiumMgmt.dueLabel} ${language === 'en' ? policy.dueDateEn : policy.dueDate}`} variant="amber" />
           </View>
           <View>
             <Text style={{ fontFamily: fontFamily.jakarta.extraBold, fontSize: 40, color: colors.ink, letterSpacing: -1.2, lineHeight: 44 }}>
