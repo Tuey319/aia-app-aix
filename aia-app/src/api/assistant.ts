@@ -16,7 +16,8 @@ export type ScreenId =
   | 'Vitality'
   | 'ContactAgent'
   | 'FaqList'
-  | 'History';
+  | 'History'
+  | 'ChangeFreq';
 
 // Kept in sync with SCREEN_TABS in AssistantScreen.tsx, which knows how to
 // route each of these ids to its owning tab/stack.
@@ -29,6 +30,7 @@ const SCREEN_CATALOG: { id: ScreenId; desc: string }[] = [
   { id: 'ContactAgent', desc: 'Contact a human insurance agent' },
   { id: 'FaqList', desc: 'Browse frequently asked questions' },
   { id: 'History', desc: 'View payment history' },
+  { id: 'ChangeFreq', desc: 'Change premium payment frequency/period (e.g. switch between monthly, quarterly, or annual payments)' },
 ];
 
 const VALID_SCREENS = new Set<string>(SCREEN_CATALOG.map((s) => s.id));

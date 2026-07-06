@@ -82,6 +82,7 @@ const SCREEN_TABS: Record<string, string> = {
   Vitality: 'PolicyTab',
   ContactAgent: 'AccountTab',
   FaqList: 'AccountTab',
+  ChangeFreq: 'AccountTab',
 };
 
 function navigateToScreen(navigation: Nav, screen: string) {
