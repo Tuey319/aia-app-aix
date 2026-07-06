@@ -65,7 +65,7 @@ aia-app/
 │   │   ├── TabNavigator.tsx     # 5-tab bottom bar (Home, Policy, Vitality, Benefits, Account)
 │   │   ├── HomeStack.tsx        # Home + Premium Management + Payment flow + Celebration + System
 │   │   ├── PolicyStack.tsx      # Policy + docs + coverage + Vitality
-│   │   ├── ClaimsStack.tsx      # 6-step e-claims flow
+│   │   ├── ClaimsStack.tsx      # e-claims flow (start → details → docs → OTP → review → submitting → success/declined)
 │   │   └── AccountStack.tsx     # Account + Support + FAQ
 │   │
 │   └── screens/
@@ -73,34 +73,36 @@ aia-app/
 │       ├── HomeScreen.tsx
 │       ├── PlaceholderScreen.tsx
 │       ├── premium/             # Premium Management hub + all tools
-│       ├── payment/             # 7-step payment flow
+│       ├── payment/             # Payment flow (select → coverage → review → method → card/QR → success)
 │       ├── policy/              # Policy, docs, coverage, Vitality
-│       ├── claims/              # 6-step e-claims flow
+│       ├── claims/              # e-claims flow
 │       ├── celebration/         # AI Celebration ecosystem (milestones, badges, gratitude, sharing)
 │       ├── benefits/            # Benefits tab
 │       ├── assistant/           # AI chat assistant
 │       ├── account/             # Account settings + profile
 │       ├── support/             # Support, FAQ, change freq, contact
+│       ├── notifications/       # Notification center
 │       └── system/              # Empty states, loading, error, offline screens
 ```
 
 ---
 
-## Screens (65 implemented)
+## Screens (69 implemented)
 
 | Section | Screens |
 |---|---|
 | Auth | Login |
-| Home | Home |
-| Premium Management | PremiumMgmt · Affordability · Value · Illustration · AdjustPlan · Costs · CoverageOverview · LifestyleCheck · Recommend · History · HistoryFiltered |
-| Payment (7-step) | PaySelect · PayCoverage · PayReview · PayMethod · PayCard · PayQr · PaySuccess · PayChecking · PayProcessing |
-| Policy | Policy · PolicyDocs · CoverageDetail · Vitality |
-| Claims (6-step) | ClaimStart · ClaimDetails · ClaimAmount · ClaimDocs · ClaimPayment · ClaimReview · ClaimSuccess · ClaimHistory · ClaimSubmitting · ClaimDeclined |
+| Home | Home · AllServices |
+| Premium Management | PremiumMgmt · Affordability · Value · Illustration · AdjustPlan · Costs · CoverageOverview · LifestyleCheck · Recommend · History |
+| Payment | PaySelect · PayCoverage · PayReview · PayMethod · PayCard · PayQr · PaySuccess · PayChecking · PayProcessing |
+| Policy | Policy · AllPolicies · PolicyDetail · PolicyDocs · CoverageDetail · Vitality · PremiumPaymentInfo |
+| Claims | ClaimStart · ClaimDetails · ClaimDocs · ClaimOtp · ClaimReview · ClaimSubmitting · ClaimSuccess · ClaimHistory · ClaimDeclined |
 | AI Celebration | Celebration · CelebrationDetail · AICelebrationHub · BadgeCollection · ProtectionJourney · GratitudeLetter · RewardPrivilege · SharePride |
 | Benefits | Benefits |
-| AI Assistant | Assistant · AssistantTyping · AssistantAction |
+| AI Assistant | Assistant |
 | Account | Account · ProfileEdit |
-| Support | Support · FaqList · FaqSearch · FaqAnswer · ChangeFreq · FreqConfirm · ContactAgent |
+| Support | Support · FaqList · FaqSearch · FaqAnswer · ChangeFreq · FreqConfirm · FreqOtp · FreqSubmitting · FreqSuccess · ContactAgent |
+| Notifications | Notifications |
 | Empty States | EmptyClaims · EmptyHistory · EmptyPolicies |
 | System | PayFailed · SearchLoading · GenericError · Offline · SessionTimeout |
 
@@ -110,18 +112,20 @@ aia-app/
 
 | Package | Version | Purpose |
 |---|---|---|
-| expo | ~56.0 | Managed workflow |
-| react-native | 0.85 | Core framework |
-| @react-navigation/native | ^7 | Navigation container |
-| @react-navigation/native-stack | ^7 | Stack navigator |
-| @react-navigation/bottom-tabs | ^7 | Tab bar |
-| react-native-screens | 4.25 | Native screen optimization |
-| react-native-safe-area-context | ~5.7 | Safe area insets |
-| expo-font | ~56 | Font loading |
+| expo | ^54.0 | Managed workflow |
+| react-native | 0.81.5 | Core framework |
+| @react-navigation/native | ^7.3 | Navigation container |
+| @react-navigation/native-stack | ^7.17 | Stack navigator |
+| @react-navigation/bottom-tabs | ^7.18 | Tab bar |
+| react-native-screens | ~4.16 | Native screen optimization |
+| react-native-safe-area-context | ~5.6 | Safe area insets |
+| expo-font | ~14.0 | Font loading |
 | @expo-google-fonts/* | ^0.4 | Plus Jakarta Sans, Anuphan, IBM Plex Mono |
-| @expo/vector-icons | bundled | MaterialIcons (flat red, no chips) |
-| expo-linear-gradient | ~56 | Hero card gradients |
-| @react-native-community/slider | 5.2 | AdjustPlan coverage slider |
+| @expo/vector-icons | ^15.0 | MaterialIcons (flat red, no chips) |
+| expo-linear-gradient | ~15.0 | Hero card gradients |
+| expo-image | ~3.0 | Partner/benefit logo rendering |
+| react-native-svg | 15.12 | Available for richer charts (BarChart is still View-based) |
+| @react-native-community/slider | 5.0 | AdjustPlan coverage slider |
 | zustand | ^5 | Lightweight global state |
 
 ---
@@ -163,7 +167,6 @@ Replace with real API calls at the 🔌 markers in each screen.
 
 ## Known Gaps (from design spec)
 
-- **i18n copy**: Language toggle in Account screen switches fonts (Thai ↔ Latin) but copy strings are hardcoded in Thai. Wire `useAppStore(s => s.language)` into a strings file to complete EN mode.
 - **Real API**: All 🔌 endpoints (auth, policy data, payment processing, illustration engine, claims submission) need wiring to AIA's backend services.
 - **Ad banners**: Home carousel uses placeholder gradient cards. Replace with remote images from AIA's campaign CMS.
 - **AIA Marketplace**: The coverage upsell deep-link opens a placeholder — wire to AIA Marketplace URL.
