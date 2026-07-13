@@ -51,7 +51,7 @@ export function ClaimDetailsScreen() {
       >
         {/* ── เลือกกรมธรรม์ ──────────────────────────────────── */}
         <SectionCard title={s.claims.selectPolicyTitle}>
-          <DropdownRow label={s.claims.policyNoDropdown} value={language === 'en' ? 'TXXXXXXXXX-Group Insurance' : 'TXXXXXXXXX-ประกันกลุ่ม'} rightIcon="expand-more" onPress={() => {}} />
+          <DropdownRow label={s.claims.policyNoDropdown} value={language === 'en' ? 'TXXXXXXXXXX-Group Insurance' : 'TXXXXXXXXXX-ประกันกลุ่ม'} rightIcon="expand-more" onPress={() => {}} />
           <Divider />
           <DropdownRow
             label={s.claims.insuredPerson}

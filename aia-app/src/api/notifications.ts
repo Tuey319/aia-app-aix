@@ -8,6 +8,7 @@
 // the style of the STUB_NOTIFICATIONS this replaces.
 
 import { Notification, NotificationIntent } from '../screens/notifications/notificationTypes';
+import { fetchWithTimeout } from './http';
 
 const NOTIFICATIONS_BASE_URL = process.env.EXPO_PUBLIC_NOTIFICATIONS_URL;
 
@@ -131,18 +132,23 @@ export async function fetchNotifications(customerId: string): Promise<Notificati
   if (!NOTIFICATIONS_BASE_URL) {
     throw new Error('Missing EXPO_PUBLIC_NOTIFICATIONS_URL');
   }
-  const res = await fetch(`${NOTIFICATIONS_BASE_URL}/api/notifications?customerId=${encodeURIComponent(customerId)}`);
+  const res = await fetchWithTimeout(`${NOTIFICATIONS_BASE_URL}/api/notifications?customerId=${encodeURIComponent(customerId)}`);
   if (!res.ok) {
     throw new Error(`Notifications API error: ${res.status}`);
   }
   const remote: RemoteNotification[] = await res.json();
-  return remote.map(toAppNotification);
+  if (!Array.isArray(remote)) {
+    throw new Error('Malformed notifications response: expected an array');
+  }
+  // Skip intents this app version doesn't know — a newer server intent would
+  // otherwise crash toAppNotification's INTENT_ROUTE lookup.
+  return remote.filter((n) => n.intent in INTENT_ROUTE).map(toAppNotification);
 }
 
 export async function markNotificationRead(id: string): Promise<void> {
   if (!NOTIFICATIONS_BASE_URL) return;
   try {
-    await fetch(`${NOTIFICATIONS_BASE_URL}/api/notifications/${encodeURIComponent(id)}/read`, { method: 'POST' });
+    await fetchWithTimeout(`${NOTIFICATIONS_BASE_URL}/api/notifications/${encodeURIComponent(id)}/read`, { method: 'POST' });
   } catch {
     // best-effort: local UI state already updated optimistically by the caller
   }
@@ -151,7 +157,7 @@ export async function markNotificationRead(id: string): Promise<void> {
 export async function dismissNotification(id: string): Promise<void> {
   if (!NOTIFICATIONS_BASE_URL) return;
   try {
-    await fetch(`${NOTIFICATIONS_BASE_URL}/api/notifications/${encodeURIComponent(id)}/dismiss`, { method: 'POST' });
+    await fetchWithTimeout(`${NOTIFICATIONS_BASE_URL}/api/notifications/${encodeURIComponent(id)}/dismiss`, { method: 'POST' });
   } catch {
     // best-effort: local UI state already updated optimistically by the caller
   }

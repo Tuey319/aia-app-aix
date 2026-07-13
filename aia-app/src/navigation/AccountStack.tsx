@@ -1,39 +1,22 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AccountStackParamList } from './types';
-import { PlaceholderScreen } from '../screens/PlaceholderScreen';
+import { AccountScreen } from '../screens/account/AccountScreen';
+import { ProfileEditScreen } from '../screens/account/ProfileEditScreen';
+import { SupportScreen } from '../screens/support/SupportScreen';
+import { FaqListScreen } from '../screens/support/FaqListScreen';
+import { FaqSearchScreen } from '../screens/support/FaqSearchScreen';
+import { FaqAnswerScreen } from '../screens/support/FaqAnswerScreen';
+import { ChangeFreqScreen } from '../screens/support/ChangeFreqScreen';
+import { FreqConfirmScreen } from '../screens/support/FreqConfirmScreen';
+import { FreqOtpScreen } from '../screens/support/FreqOtpScreen';
+import { FreqSubmittingScreen } from '../screens/support/FreqSubmittingScreen';
+import { FreqSuccessScreen } from '../screens/support/FreqSuccessScreen';
+import { ContactAgentScreen } from '../screens/support/ContactAgentScreen';
+import { SearchLoadingScreen } from '../screens/system/SearchLoadingScreen';
+import { AssistantScreen } from '../screens/assistant/AssistantScreen';
 
 const Stack = createNativeStackNavigator<AccountStackParamList>();
-
-let AccountScreen: React.ComponentType<any>;
-let ProfileEditScreen: React.ComponentType<any>;
-let SupportScreen: React.ComponentType<any>;
-let FaqListScreen: React.ComponentType<any>;
-let FaqSearchScreen: React.ComponentType<any>;
-let FaqAnswerScreen: React.ComponentType<any>;
-let ChangeFreqScreen: React.ComponentType<any>;
-let FreqConfirmScreen: React.ComponentType<any>;
-let FreqOtpScreen: React.ComponentType<any>;
-let FreqSubmittingScreen: React.ComponentType<any>;
-let FreqSuccessScreen: React.ComponentType<any>;
-let ContactAgentScreen: React.ComponentType<any>;
-let SearchLoadingScreen: React.ComponentType<any>;
-let AssistantScreen: React.ComponentType<any>;
-
-try { AccountScreen = require('../screens/account/AccountScreen').AccountScreen; } catch { AccountScreen = () => <PlaceholderScreen name="บัญชี" />; }
-try { ProfileEditScreen = require('../screens/account/ProfileEditScreen').ProfileEditScreen; } catch { ProfileEditScreen = () => <PlaceholderScreen name="ข้อมูลส่วนตัว" />; }
-try { SupportScreen = require('../screens/support/SupportScreen').SupportScreen; } catch { SupportScreen = () => <PlaceholderScreen name="ศูนย์ช่วยเหลือ" />; }
-try { FaqListScreen = require('../screens/support/FaqListScreen').FaqListScreen; } catch { FaqListScreen = () => <PlaceholderScreen name="คำถามที่พบบ่อย" />; }
-try { FaqSearchScreen = require('../screens/support/FaqSearchScreen').FaqSearchScreen; } catch { FaqSearchScreen = () => <PlaceholderScreen name="ค้นหา" />; }
-try { FaqAnswerScreen = require('../screens/support/FaqAnswerScreen').FaqAnswerScreen; } catch { FaqAnswerScreen = () => <PlaceholderScreen name="คำตอบ" />; }
-try { ChangeFreqScreen = require('../screens/support/ChangeFreqScreen').ChangeFreqScreen; } catch { ChangeFreqScreen = () => <PlaceholderScreen name="เปลี่ยนงวดชำระ" />; }
-try { FreqConfirmScreen = require('../screens/support/FreqConfirmScreen').FreqConfirmScreen; } catch { FreqConfirmScreen = () => <PlaceholderScreen name="ยืนยันการเปลี่ยน" />; }
-try { FreqOtpScreen = require('../screens/support/FreqOtpScreen').FreqOtpScreen; } catch { FreqOtpScreen = () => <PlaceholderScreen name="ใส่รหัส OTP" />; }
-try { FreqSubmittingScreen = require('../screens/support/FreqSubmittingScreen').FreqSubmittingScreen; } catch { FreqSubmittingScreen = () => <PlaceholderScreen name="กำลังดำเนินการ" />; }
-try { FreqSuccessScreen = require('../screens/support/FreqSuccessScreen').FreqSuccessScreen; } catch { FreqSuccessScreen = () => <PlaceholderScreen name="สำเร็จ" />; }
-try { ContactAgentScreen = require('../screens/support/ContactAgentScreen').ContactAgentScreen; } catch { ContactAgentScreen = () => <PlaceholderScreen name="ติดต่อเจ้าหน้าที่" />; }
-try { SearchLoadingScreen = require('../screens/system/SearchLoadingScreen').SearchLoadingScreen; } catch { SearchLoadingScreen = () => <PlaceholderScreen name="กำลังค้นหา" />; }
-try { AssistantScreen = require('../screens/assistant/AssistantScreen').AssistantScreen; } catch { AssistantScreen = () => <PlaceholderScreen name="ผู้ช่วย AIA" />; }
 
 export function AccountStack() {
   return (

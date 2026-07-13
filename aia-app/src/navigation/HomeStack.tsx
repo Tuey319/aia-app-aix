@@ -9,59 +9,35 @@ import { CoverageOverviewScreen } from '../screens/premium/CoverageOverviewScree
 import { AdjustPlanScreen } from '../screens/premium/AdjustPlanScreen';
 import { LifestyleCheckScreen } from '../screens/premium/LifestyleCheckScreen';
 import { CostsScreen } from '../screens/premium/CostsScreen';
-import { PlaceholderScreen } from '../screens/PlaceholderScreen';
+import { AffordabilityScreen } from '../screens/premium/AffordabilityScreen';
+import { ValueScreen } from '../screens/premium/ValueScreen';
+import { RecommendScreen } from '../screens/premium/RecommendScreen';
+import { HistoryScreen } from '../screens/premium/HistoryScreen';
+import { PaySelectScreen } from '../screens/payment/PaySelectScreen';
+import { PayCoverageScreen } from '../screens/payment/PayCoverageScreen';
+import { PayReviewScreen } from '../screens/payment/PayReviewScreen';
+import { PayMethodScreen } from '../screens/payment/PayMethodScreen';
+import { PayCardScreen } from '../screens/payment/PayCardScreen';
+import { PayQrScreen } from '../screens/payment/PayQrScreen';
+import { PaySuccessScreen } from '../screens/payment/PaySuccessScreen';
+import { PayCheckingScreen } from '../screens/payment/PayCheckingScreen';
+import { PayProcessingScreen } from '../screens/payment/PayProcessingScreen';
+import { PayFailedScreen } from '../screens/system/PayFailedScreen';
+import { AssistantScreen } from '../screens/assistant/AssistantScreen';
+import { GenericErrorScreen } from '../screens/system/GenericErrorScreen';
+import { OfflineScreen } from '../screens/system/OfflineScreen';
+import { SessionTimeoutScreen } from '../screens/system/SessionTimeoutScreen';
+import { NotificationsScreen } from '../screens/notifications/NotificationsScreen';
+import { CelebrationScreen } from '../screens/celebration/CelebrationScreen';
+import { CelebrationDetailScreen } from '../screens/celebration/CelebrationDetailScreen';
+import { RewardPrivilegeScreen } from '../screens/celebration/RewardPrivilegeScreen';
+import { AICelebrationHubScreen } from '../screens/celebration/AICelebrationHubScreen';
+import { BadgeCollectionScreen } from '../screens/celebration/BadgeCollectionScreen';
+import { ProtectionJourneyScreen } from '../screens/celebration/ProtectionJourneyScreen';
+import { GratitudeLetterScreen } from '../screens/celebration/GratitudeLetterScreen';
+import { SharePrideScreen } from '../screens/celebration/SharePrideScreen';
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
-
-// Agent-built premium screens
-let AffordabilityScreen: React.ComponentType<any>;
-let ValueScreen: React.ComponentType<any>;
-let RecommendScreen: React.ComponentType<any>;
-let HistoryScreen: React.ComponentType<any>;
-
-try { AffordabilityScreen = require('../screens/premium/AffordabilityScreen').AffordabilityScreen; } catch { AffordabilityScreen = () => <PlaceholderScreen name="สุขภาพการเงิน" />; }
-try { ValueScreen = require('../screens/premium/ValueScreen').ValueScreen; } catch { ValueScreen = () => <PlaceholderScreen name="คุณค่าความคุ้มครอง" />; }
-try { RecommendScreen = require('../screens/premium/RecommendScreen').RecommendScreen; } catch { RecommendScreen = () => <PlaceholderScreen name="คำแนะนำเฉพาะคุณ" />; }
-try { HistoryScreen = require('../screens/premium/HistoryScreen').HistoryScreen; } catch { HistoryScreen = () => <PlaceholderScreen name="ประวัติการชำระ" />; }
-
-// Agent-built payment screens
-let PaySelectScreen: React.ComponentType<any>;
-let PayCoverageScreen: React.ComponentType<any>;
-let PayReviewScreen: React.ComponentType<any>;
-let PayMethodScreen: React.ComponentType<any>;
-let PayCardScreen: React.ComponentType<any>;
-let PayQrScreen: React.ComponentType<any>;
-let PaySuccessScreen: React.ComponentType<any>;
-let PayCheckingScreen: React.ComponentType<any>;
-let PayProcessingScreen: React.ComponentType<any>;
-let PayFailedScreen: React.ComponentType<any>;
-
-try { PaySelectScreen = require('../screens/payment/PaySelectScreen').PaySelectScreen; } catch { PaySelectScreen = () => <PlaceholderScreen name="เลือกกรมธรรม์" />; }
-try { PayCoverageScreen = require('../screens/payment/PayCoverageScreen').PayCoverageScreen; } catch { PayCoverageScreen = () => <PlaceholderScreen name="ความคุ้มครองเพิ่มเติม" />; }
-try { PayReviewScreen = require('../screens/payment/PayReviewScreen').PayReviewScreen; } catch { PayReviewScreen = () => <PlaceholderScreen name="ยืนยันการชำระ" />; }
-try { PayMethodScreen = require('../screens/payment/PayMethodScreen').PayMethodScreen; } catch { PayMethodScreen = () => <PlaceholderScreen name="เลือกวิธีชำระ" />; }
-try { PayCardScreen = require('../screens/payment/PayCardScreen').PayCardScreen; } catch { PayCardScreen = () => <PlaceholderScreen name="กรอกข้อมูลบัตร" />; }
-try { PayQrScreen = require('../screens/payment/PayQrScreen').PayQrScreen; } catch { PayQrScreen = () => <PlaceholderScreen name="QR พร้อมเพย์" />; }
-try { PaySuccessScreen = require('../screens/payment/PaySuccessScreen').PaySuccessScreen; } catch { PaySuccessScreen = () => <PlaceholderScreen name="ชำระเงินสำเร็จ" />; }
-try { PayCheckingScreen = require('../screens/payment/PayCheckingScreen').PayCheckingScreen; } catch { PayCheckingScreen = () => <PlaceholderScreen name="กำลังตรวจสอบ" />; }
-try { PayProcessingScreen = require('../screens/payment/PayProcessingScreen').PayProcessingScreen; } catch { PayProcessingScreen = () => <PlaceholderScreen name="กำลังดำเนินการ" />; }
-try { PayFailedScreen = require('../screens/payment/PayFailedScreen').PayFailedScreen; } catch {
-  try { PayFailedScreen = require('../screens/system/PayFailedScreen').PayFailedScreen; } catch { PayFailedScreen = () => <PlaceholderScreen name="การชำระเงินไม่สำเร็จ" />; }
-}
-
-// Agent-built assistant screens
-let AssistantScreen: React.ComponentType<any>;
-
-try { AssistantScreen = require('../screens/assistant/AssistantScreen').AssistantScreen; } catch { AssistantScreen = () => <PlaceholderScreen name="ผู้ช่วย AIA" />; }
-
-// System screens
-let GenericErrorScreen: React.ComponentType<any>;
-let OfflineScreen: React.ComponentType<any>;
-let SessionTimeoutScreen: React.ComponentType<any>;
-
-try { GenericErrorScreen = require('../screens/system/GenericErrorScreen').GenericErrorScreen; } catch { GenericErrorScreen = () => <PlaceholderScreen name="เกิดข้อผิดพลาด" />; }
-try { OfflineScreen = require('../screens/system/OfflineScreen').OfflineScreen; } catch { OfflineScreen = () => <PlaceholderScreen name="ไม่มีอินเทอร์เน็ต" />; }
-try { SessionTimeoutScreen = require('../screens/system/SessionTimeoutScreen').SessionTimeoutScreen; } catch { SessionTimeoutScreen = () => <PlaceholderScreen name="หมดเวลาใช้งาน" />; }
 
 export function HomeStack() {
   return (
@@ -97,17 +73,17 @@ export function HomeStack() {
       <Stack.Screen name="Offline" component={OfflineScreen} />
       <Stack.Screen name="SessionTimeout" component={SessionTimeoutScreen} />
       {/* Notifications — Call-Intent Prediction stubs */}
-      <Stack.Screen name="Notifications" component={require('../screens/notifications/NotificationsScreen').NotificationsScreen} />
+      <Stack.Screen name="Notifications" component={NotificationsScreen} />
       {/* AI Celebration — Delight Mak (full ecosystem) */}
-      <Stack.Screen name="Celebration" component={require('../screens/celebration/CelebrationScreen').CelebrationScreen}
+      <Stack.Screen name="Celebration" component={CelebrationScreen}
         options={{ presentation: 'transparentModal', animation: 'fade' }} />
-      <Stack.Screen name="CelebrationDetail" component={require('../screens/celebration/CelebrationDetailScreen').CelebrationDetailScreen} />
-      <Stack.Screen name="RewardPrivilege" component={require('../screens/celebration/RewardPrivilegeScreen').RewardPrivilegeScreen} />
-      <Stack.Screen name="AICelebrationHub" component={require('../screens/celebration/AICelebrationHubScreen').AICelebrationHubScreen} />
-      <Stack.Screen name="BadgeCollection" component={require('../screens/celebration/BadgeCollectionScreen').BadgeCollectionScreen} />
-      <Stack.Screen name="ProtectionJourney" component={require('../screens/celebration/ProtectionJourneyScreen').ProtectionJourneyScreen} />
-      <Stack.Screen name="GratitudeLetter" component={require('../screens/celebration/GratitudeLetterScreen').GratitudeLetterScreen} />
-      <Stack.Screen name="SharePride" component={require('../screens/celebration/SharePrideScreen').SharePrideScreen} />
+      <Stack.Screen name="CelebrationDetail" component={CelebrationDetailScreen} />
+      <Stack.Screen name="RewardPrivilege" component={RewardPrivilegeScreen} />
+      <Stack.Screen name="AICelebrationHub" component={AICelebrationHubScreen} />
+      <Stack.Screen name="BadgeCollection" component={BadgeCollectionScreen} />
+      <Stack.Screen name="ProtectionJourney" component={ProtectionJourneyScreen} />
+      <Stack.Screen name="GratitudeLetter" component={GratitudeLetterScreen} />
+      <Stack.Screen name="SharePride" component={SharePrideScreen} />
     </Stack.Navigator>
   );
 }

@@ -187,7 +187,7 @@ export function AssistantScreen() {
 
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!trimmed || isTyping) return;
 
     const userMsg: ChatMessage = { id: `${Date.now()}-u`, role: 'user', text: trimmed };
     const priorMessages = messages;

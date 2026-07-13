@@ -34,6 +34,7 @@ export function AccountScreen() {
   const setLanguage = useAppStore((s) => s.setLanguage);
   const faceIdEnabled = useAppStore((s) => s.faceIdEnabled);
   const setFaceIdEnabled = useAppStore((s) => s.setFaceIdEnabled);
+  const setLoggedIn = useAppStore((s) => s.setLoggedIn);
   const s = useStrings();
 
   return (
@@ -248,7 +249,7 @@ export function AccountScreen() {
 
           {/* Logout — red text, centred, at bottom */}
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => setLoggedIn(false)}
             activeOpacity={0.7}
             style={{
               alignItems: 'center',

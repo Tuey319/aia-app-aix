@@ -5,6 +5,8 @@
 // methods are there?") gets a real explanatory answer *and* a helpful
 // next-step button, instead of just a bare navigation card.
 
+import { fetchWithTimeout } from './http';
+
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
@@ -79,7 +81,7 @@ export async function fetchAssistantReply(history: ChatTurn[]): Promise<Assistan
     throw new Error('Missing EXPO_PUBLIC_GROQ_API_KEY');
   }
 
-  const response = await fetch(GROQ_API_URL, {
+  const response = await fetchWithTimeout(GROQ_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

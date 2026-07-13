@@ -198,7 +198,7 @@ export function NotificationsScreen() {
         // aia-call-intelligence-service unreachable (not running / wrong URL / offline) --
         // fall back to stub data so the screen still demos. Not surfaced to the
         // customer (a "can't reach server" toast isn't delightful); logged for us.
-        console.warn('[notifications] falling back to stub data:', err);
+        if (__DEV__) console.warn('[notifications] falling back to stub data:', err);
         if (!cancelled) {
           setNotifications(STUB_NOTIFICATIONS);
           setUsingFallback(true);

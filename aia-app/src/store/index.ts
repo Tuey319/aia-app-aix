@@ -42,7 +42,7 @@ export const useAppStore = create<AppState>((set) => ({
     monthlyPremium: 4250,
     dueDate: '25 มิ.ย.',
     dueDateEn: '25 Jun',
-    policyNo: '12-3456789',
+    policyNo: 'T1000000001',
   },
 
   setLanguage: (language) => set({ language }),

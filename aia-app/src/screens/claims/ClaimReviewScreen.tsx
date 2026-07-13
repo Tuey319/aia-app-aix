@@ -40,7 +40,7 @@ export function ClaimReviewScreen() {
 
   const SUMMARY_ROWS: SummaryRow[] = [
     { label: s.claims.insuredPerson, value: language === 'en' ? 'Somchai Jaidee' : 'สมชาย ใจดี' },
-    { label: s.claims.policyNoDropdown, value: 'TXXXXXXXXX' },
+    { label: s.claims.policyNoDropdown, value: 'TXXXXXXXXXX' },
     { label: s.claims.policyHolderLabel, value: language === 'en' ? 'AIA Company Limited' : 'บริษัท เอไอเอ จำกัด' },
     { label: language === 'en' ? 'Claim Type' : 'ประเภทการเคลม', value: s.claims.claimCategoryMedical },
     { label: s.claims.treatmentTypeLabel, value: s.claims.treatmentOPD },
