@@ -18,14 +18,8 @@ import { HomeStackParamList } from '../navigation/types';
 import { colors, fontFamily, radius, screenPadding } from '../tokens';
 import { cardShadow, primaryButtonShadow } from '../tokens/shadows';
 import { StatusPill } from '../components/StatusPill';
+import { Image as ExpoImage } from 'expo-image';
 import { AiaLogo } from '../components/AiaLogo';
-import {
-  IllustrationCoinsDrop,
-  IllustrationMedicine,
-  IllustrationBeHealthy,
-  IllustrationHospital,
-  IllustrationHealthInsurance,
-} from '../components/illustrations';
 import { useAppStore } from '../store';
 import { useStrings } from '../i18n';
 
@@ -43,12 +37,14 @@ const AD_BANNERS = [
 
 const PROMO_CARDS = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
+// Unsplash photos (hotlinking the CDN is allowed and needs no API key).
+// w/q params keep the download small for a 64px thumbnail.
 const ARTICLES = [
-  { id: '1', titleKey: 'article1Title' as const, Illustration: IllustrationCoinsDrop },
-  { id: '2', titleKey: 'article2Title' as const, Illustration: IllustrationMedicine },
-  { id: '3', titleKey: 'article3Title' as const, Illustration: IllustrationBeHealthy },
-  { id: '4', titleKey: 'article4Title' as const, Illustration: IllustrationHospital },
-  { id: '5', titleKey: 'article5Title' as const, Illustration: IllustrationHealthInsurance },
+  { id: '1', titleKey: 'article1Title' as const, imageUrl: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=256&q=75' },
+  { id: '2', titleKey: 'article2Title' as const, imageUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=256&q=75' },
+  { id: '3', titleKey: 'article3Title' as const, imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=256&q=75' },
+  { id: '4', titleKey: 'article4Title' as const, imageUrl: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=256&q=75' },
+  { id: '5', titleKey: 'article5Title' as const, imageUrl: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=256&q=75' },
 ];
 
 function AdBanner({ source }: { source: number }) {
@@ -578,7 +574,7 @@ export function HomeScreen() {
             </TouchableOpacity>
           </View>
           <View style={{ gap: 10 }}>
-            {ARTICLES.map(({ id, titleKey, Illustration }) => (
+            {ARTICLES.map(({ id, titleKey, imageUrl }) => (
               <TouchableOpacity
                 key={id}
                 activeOpacity={0.8}
@@ -604,19 +600,12 @@ export function HomeScreen() {
                 >
                   {s.home[titleKey]}
                 </Text>
-                <View
-                  style={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: 12,
-                    backgroundColor: colors.screenBg,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <Illustration width={64} height={64} />
-                </View>
+                <ExpoImage
+                  source={{ uri: imageUrl }}
+                  style={{ width: 64, height: 64, borderRadius: 12, backgroundColor: colors.screenBg }}
+                  contentFit="cover"
+                  transition={150}
+                />
               </TouchableOpacity>
             ))}
           </View>

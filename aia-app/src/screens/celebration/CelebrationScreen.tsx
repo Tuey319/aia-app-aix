@@ -142,7 +142,10 @@ export function CelebrationScreen() {
               {/* Action buttons */}
               <View style={{ width: '100%', gap: 10 }}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('CelebrationDetail')}
+                  // replace, not navigate: pushing a card screen on top of this
+                  // transparentModal makes iOS present it as a pageSheet (black
+                  // band + floating card) that sticks for the rest of the stack.
+                  onPress={() => navigation.replace('CelebrationDetail')}
                   activeOpacity={0.82}
                   style={{ backgroundColor: colors.primary, borderRadius: radius.button, height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8, ...primaryButtonShadow }}
                 >
@@ -150,14 +153,14 @@ export function CelebrationScreen() {
                   <Text style={{ color: colors.white, fontFamily: fontFamily.anuphan.bold, fontSize: 15 }}>{language === 'en' ? 'View Celebration Details' : 'ดูรายละเอียดการฉลอง'}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('RewardPrivilege')}
+                  onPress={() => navigation.replace('RewardPrivilege')}
                   activeOpacity={0.82}
                   style={{ borderWidth: 1.5, borderColor: colors.primary, borderRadius: radius.button, height: 48, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 }}
                 >
                   <MaterialIcons name="card-giftcard" size={18} color={colors.primary} />
                   <Text style={{ color: colors.primary, fontFamily: fontFamily.anuphan.semiBold, fontSize: 14 }}>{language === 'en' ? 'View Your Privileges 🎁' : 'ดูสิทธิพิเศษของคุณ 🎁'}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('Home')} activeOpacity={0.7} hitSlop={8} style={{ minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity onPress={() => navigation.popToTop()} activeOpacity={0.7} hitSlop={8} style={{ minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
                   <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 13, color: colors.textSecondary }}>{language === 'en' ? 'Back to Home' : 'กลับหน้าหลัก'}</Text>
                 </TouchableOpacity>
               </View>

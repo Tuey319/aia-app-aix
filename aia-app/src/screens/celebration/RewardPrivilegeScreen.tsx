@@ -198,7 +198,7 @@ export function RewardPrivilegeScreen() {
           <MaterialIcons name="share" size={18} color={colors.white} />
           <Text style={{ color: colors.white, fontFamily: fontFamily.anuphan.bold, fontSize: 16 }}>{language === 'en' ? 'Share Your Pride 🎉' : 'แชร์ความภาคภูมิใจ 🎉'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} activeOpacity={0.7}
+        <TouchableOpacity onPress={() => navigation.popToTop()} activeOpacity={0.7}
           style={{ height: 40, alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{ fontFamily: fontFamily.anuphan.regular, fontSize: 13, color: colors.textSecondary }}>{language === 'en' ? 'Back to Home' : 'กลับหน้าหลัก'}</Text>
         </TouchableOpacity>

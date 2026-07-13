@@ -10,7 +10,7 @@ interface Props {
 export function AiaLogo({ size = 24 }: Props) {
   return (
     <Image
-      source={require('../../assets/aia_logo.svg')}
+      source={require('../../assets/aia_logo.png')}
       style={{ width: size, height: size }}
       contentFit="contain"
     />
