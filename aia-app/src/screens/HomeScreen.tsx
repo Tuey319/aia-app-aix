@@ -23,7 +23,7 @@ import { AiaLogo } from '../components/AiaLogo';
 import { useAppStore } from '../store';
 import { useStrings } from '../i18n';
 import { fetchNotifications, DEMO_CUSTOMER_ID } from '../api/notifications';
-import { Notification, STUB_NOTIFICATIONS, INTENT_META } from './notifications/notificationTypes';
+import { Notification, STUB_NOTIFICATIONS } from './notifications/notificationTypes';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const BANNER_W = SCREEN_WIDTH - screenPadding * 2;
@@ -221,7 +221,9 @@ export function HomeScreen() {
             style={{
               marginHorizontal: screenPadding,
               marginTop: 16,
-              backgroundColor: colors.card,
+              backgroundColor: colors.primaryTint,
+              borderWidth: 1,
+              borderColor: colors.primaryTintDark,
               borderRadius: radius.card,
               padding: 14,
               flexDirection: 'row',
@@ -235,16 +237,12 @@ export function HomeScreen() {
                 width: 40,
                 height: 40,
                 borderRadius: 12,
-                backgroundColor: INTENT_META[topNotif.intent].colorBg,
+                backgroundColor: colors.primary,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <MaterialIcons
-                name={INTENT_META[topNotif.intent].icon as any}
-                size={20}
-                color={INTENT_META[topNotif.intent].colorIcon}
-              />
+              <MaterialIcons name="notifications-active" size={20} color={colors.white} />
             </View>
             <View style={{ flex: 1, gap: 2 }}>
               <Text
