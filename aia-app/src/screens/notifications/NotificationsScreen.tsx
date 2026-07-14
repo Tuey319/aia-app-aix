@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, fontFamily, screenPadding } from '../../tokens';
 import { useAppStore } from '../../store';
-import { fetchNotifications, markNotificationRead, dismissNotification } from '../../api/notifications';
+import { fetchNotifications, markNotificationRead, dismissNotification, DEMO_CUSTOMER_ID } from '../../api/notifications';
 import {
   Notification,
   NotificationIntent,
@@ -18,12 +18,6 @@ import {
 } from './notificationTypes';
 
 type Nav = NativeStackNavigationProp<any>;
-
-// No auth/session layer exists yet to know the real logged-in customer's ID
-// (see aia-call-intelligence-service README, "Path to production" ->
-// Auth) -- pinned to a synthetic customer with active notifications until
-// that lands.
-const DEMO_CUSTOMER_ID = 'C102221';
 
 // ─── Card ────────────────────────────────────────────────────────────────────
 

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,8 @@ import { Image as ExpoImage } from 'expo-image';
 import { AiaLogo } from '../components/AiaLogo';
 import { useAppStore } from '../store';
 import { useStrings } from '../i18n';
+import { fetchNotifications, DEMO_CUSTOMER_ID } from '../api/notifications';
+import { Notification, STUB_NOTIFICATIONS, INTENT_META } from './notifications/notificationTypes';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const BANNER_W = SCREEN_WIDTH - screenPadding * 2;
@@ -68,6 +70,23 @@ export function HomeScreen() {
   const s = useStrings();
   const [activeIndex, setActiveIndex] = useState(0);
   const flatRef = useRef<FlatList>(null);
+  // Top proactive notification replaces the old static offer card. Same
+  // fetch + stub fallback as NotificationsScreen; highest-confidence unread wins.
+  const [topNotif, setTopNotif] = useState<Notification | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchNotifications(DEMO_CUSTOMER_ID)
+      .catch(() => STUB_NOTIFICATIONS)
+      .then((list) => {
+        if (cancelled) return;
+        const sorted = [...list].sort((a, b) => b.confidence - a.confidence);
+        // Prefer unread, but still show the top read one so the card
+        // doesn't vanish after "mark all read".
+        setTopNotif(sorted.find((n) => !n.isRead) ?? sorted[0] ?? null);
+      });
+    return () => { cancelled = true; };
+  }, []);
 
   function onScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
     setActiveIndex(Math.round(e.nativeEvent.contentOffset.x / (BANNER_W + 12)));
@@ -194,57 +213,65 @@ export function HomeScreen() {
           ))}
         </View>
 
-        {/* ── Offer card ───────────────────────────────────────── */}
-        <TouchableOpacity
-          activeOpacity={0.85}
-          onPress={() => navigation.navigate('PayCoverage')}
-          style={{
-            marginHorizontal: screenPadding,
-            marginTop: 16,
-            backgroundColor: colors.card,
-            borderRadius: radius.card,
-            padding: 14,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 12,
-            ...cardShadow,
-          }}
-        >
-          <View
+        {/* ── Top notification card (was static offer card) ────── */}
+        {topNotif && (
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate('Notifications' as any)}
             style={{
-              width: 40,
-              height: 40,
-              borderRadius: 12,
-              backgroundColor: colors.primaryTint,
+              marginHorizontal: screenPadding,
+              marginTop: 16,
+              backgroundColor: colors.card,
+              borderRadius: radius.card,
+              padding: 14,
+              flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'center',
+              gap: 12,
+              ...cardShadow,
             }}
           >
-            <MaterialIcons name="card-giftcard" size={20} color={colors.primary} />
-          </View>
-          <View style={{ flex: 1, gap: 2 }}>
-            <Text
+            <View
               style={{
-                fontFamily: fontFamily.anuphan.bold,
-                fontSize: 13,
-                color: colors.ink,
-                lineHeight: 18,
+                width: 40,
+                height: 40,
+                borderRadius: 12,
+                backgroundColor: INTENT_META[topNotif.intent].colorBg,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              {s.home.offerTitle}
-            </Text>
-            <Text
-              style={{
-                fontFamily: fontFamily.anuphan.regular,
-                fontSize: 11,
-                color: colors.textSecondary,
-              }}
-            >
-              {s.home.offerSub}
-            </Text>
-          </View>
-          <MaterialIcons name="chevron-right" size={20} color={colors.textTertiary} />
-        </TouchableOpacity>
+              <MaterialIcons
+                name={INTENT_META[topNotif.intent].icon as any}
+                size={20}
+                color={INTENT_META[topNotif.intent].colorIcon}
+              />
+            </View>
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text
+                style={{
+                  fontFamily: fontFamily.anuphan.bold,
+                  fontSize: 13,
+                  color: colors.ink,
+                  lineHeight: 18,
+                }}
+                numberOfLines={1}
+              >
+                {language === 'en' ? topNotif.titleEn : topNotif.titleTh}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: fontFamily.anuphan.regular,
+                  fontSize: 11,
+                  color: colors.textSecondary,
+                }}
+                numberOfLines={2}
+              >
+                {language === 'en' ? topNotif.bodyEn : topNotif.bodyTh}
+              </Text>
+            </View>
+            <MaterialIcons name="chevron-right" size={20} color={colors.textTertiary} />
+          </TouchableOpacity>
+        )}
 
         {/* ── Finance Hub ──────────────────────────────────────── */}
         <View style={{ paddingHorizontal: screenPadding, marginTop: 20 }}>

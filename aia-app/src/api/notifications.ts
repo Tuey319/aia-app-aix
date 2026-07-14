@@ -12,6 +12,12 @@ import { fetchWithTimeout } from './http';
 
 const NOTIFICATIONS_BASE_URL = process.env.EXPO_PUBLIC_NOTIFICATIONS_URL;
 
+// No auth/session layer exists yet to know the real logged-in customer's ID
+// (see aia-call-intelligence-service README, "Path to production" ->
+// Auth) -- pinned to a synthetic customer with active notifications until
+// that lands.
+export const DEMO_CUSTOMER_ID = 'C102221';
+
 export type RemoteNotification = {
   id: string;
   customerId: string;
